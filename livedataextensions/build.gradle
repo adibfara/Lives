@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 27
+
+
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testApplicationId "com.test.foo"
+        // Specifies the fully-qualified class name of the test instrumentation runner.
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+
+
+    }
+
+    sourceSets {
+        test.java.srcDirs += 'src/test/kotlin'
+        test.java.srcDirs += 'src/test/java'
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+}
+
+afterEvaluate {
+    android.sourceSets.all { sourceSet ->
+        if (!sourceSet.name.startsWith("test"))
+        {
+            sourceSet.kotlin.setSrcDirs([])
+        }
+    }
+}
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation  'junit:junit:4.12'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    testImplementation 'org.mockito:mockito-core:2.8.9'
+    testImplementation("android.arch.core:core-testing:1.1.1", {
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+    })
+}
