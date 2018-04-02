@@ -11,7 +11,7 @@ before_script:
   - wget --quiet --output-document=android-sdk.tgz https://dl.google.com/android/android-sdk_r${ANDROID_SDK_TOOLS}-linux.tgz
   - tar --extract --gzip --file=android-sdk.tgz
   - export ANDROID_HOME=$PWD/android-sdk-linux
-  - /$ANDROID_HOME/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
+  - $PWD/android-sdk-linux/bin/sdkmanager --licenses --sdk_root=$ANDROID_HOME
   - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter android-${ANDROID_COMPILE_SDK}
   - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter platform-tools
   - echo y | android-sdk-linux/tools/android --silent update sdk --no-ui --all --filter build-tools-${ANDROID_BUILD_TOOLS}
