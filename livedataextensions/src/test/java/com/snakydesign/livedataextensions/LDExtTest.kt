@@ -1,9 +1,6 @@
 package com.snakydesign.livedataextensions
 
-import android.annotation.SuppressLint
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.core.util.Function
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import filter
 import map
@@ -37,7 +34,7 @@ class LDExtTest {
 
     @Test
     fun `test LiveData creation`(){
-        val testingLiveData = mutableLiveDataOf(2)
+        val testingLiveData = just(2)
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
         assertEquals(2,testingLiveData.value)
 
@@ -49,7 +46,7 @@ class LDExtTest {
     @Test
     fun `test LiveData filter initial item`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = mutableLiveDataOf(2).filter {
+        val testingLiveData = just(2).filter {
             it!=null && it > 1
         }
         testingLiveData.observeForever(observer)
@@ -62,7 +59,7 @@ class LDExtTest {
     @Test
     fun `test LiveData filter multiple items`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val originalLiveData = mutableLiveDataOf<Int>()
+        val originalLiveData = just<Int>()
         val testingLiveData = originalLiveData.filter {
             it!=null && it > 10
         }
@@ -81,7 +78,7 @@ class LDExtTest {
     @Test
     fun `test LiveData map`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = mutableLiveDataOf(2).map { 3 }
+        val testingLiveData = just(2).map { 3 }
         testingLiveData.observeForever(observer)
 
         assertEquals(3,testingLiveData.value)
