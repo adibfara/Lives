@@ -2,9 +2,6 @@ package com.snakydesign.livedataextensions
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
-import filter
-import map
-import mutableLiveDataOf
 import org.junit.After
 import org.junit.Before
 
@@ -59,7 +56,7 @@ class LDExtTest {
     @Test
     fun `test LiveData filter multiple items`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val originalLiveData = just<Int>()
+        val originalLiveData = just<Int>(2)
         val testingLiveData = originalLiveData.filter {
             it!=null && it > 10
         }
