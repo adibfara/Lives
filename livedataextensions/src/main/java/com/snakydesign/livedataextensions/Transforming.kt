@@ -9,35 +9,51 @@ package com.snakydesign.livedataextensions
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 
-fun <T,O> LiveData<T>.map(  function : (T)->O):LiveData<O>{
+/**
+ * maps any values that were emitted by the LiveData to the given function
+ */
+fun <T,O> LiveData<T>.map(function : MapperFunction<T,O>):LiveData<O>{
     return Transformations.map(this,function)
 }
 
-fun <T,O> LiveData<T>.switchMap(function : (T)->LiveData<O>):LiveData<O>{
+/**
+ * maps any values that were emitted by the LiveData to the given function that produces another LiveData
+ */
+fun <T,O> LiveData<T>.switchMap(function : MapperFunction<T,LiveData<O>>):LiveData<O>{
     return Transformations.switchMap(this,function)
 }
 
-inline fun <T> LiveData<T>.doBeforeNext(crossinline onNext : (T?)->Unit):LiveData<T>{
+/**
+ * Does the `onNext` function before everything actually emitting the item to the observers
+ */
+fun <T> LiveData<T>.doBeforeNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this, {
-        onNext(it)
+        onNext.performAction(it)
         mutableLiveData.value = it
     })
     return mutableLiveData
 }
 
-inline fun <T> LiveData<T>.doAfterNext(crossinline onNext : (T?)->Unit):LiveData<T>{
+/**
+ * Does the `onNext` function after emitting the item to the observers
+ */
+fun <T> LiveData<T>.doAfterNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this, {
         mutableLiveData.value = it
-        onNext(it)
+        onNext.performAction(it)
     })
     return mutableLiveData
 }
 
-fun <T> LiveData<T>.buffer(count:Int): LiveData<List<T?>> {
+/**
+ * Buffers the items emitted by the LiveData, and emits them when they reach the `count` as a List.
+ */
+fun <T> LiveData<T>.buffer(count:Int): MutableLiveData<List<T?>> {
     val mutableLiveData: MediatorLiveData<List<T?>> = MediatorLiveData()
     val latestBuffer = mutableListOf<T?>()
     mutableLiveData.addSource(this, {
@@ -54,9 +70,16 @@ fun <T> LiveData<T>.buffer(count:Int): LiveData<List<T?>> {
     return mutableLiveData
 }
 
-fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): LiveData<T> {
+/**
+ * Emits the items of the first LiveData that emits the item. Items of other LiveDatas will never be emitted and are not considered.
+ */
+fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): MutableLiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
-    var activeLiveDataIndex = -1
+
+    var activeLiveDataIndex = inputLiveData.indexOfFirst { it.value !=null }
+    if (activeLiveDataIndex>=0){
+        mutableLiveData.value = inputLiveData[activeLiveDataIndex].value
+    }
     inputLiveData.forEachIndexed {
         index, liveData ->
         mutableLiveData.addSource(liveData, {
@@ -83,4 +106,21 @@ fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): Li
     return mutableLiveData
 }
 
-fun <T> LiveData<T>.toSingleLiveData():SingleLiveData<T> = SingleLiveData(this)
+/**
+ * Converts a LiveData to a SingleLiveData (exactly similar to LiveData.first()
+ */
+fun <T> LiveData<T>.toSingleLiveData():SingleLiveData<T> = first()
+
+/**
+ * Converts a LiveData to a MutableLiveData with the initial value set by this LiveData's value
+ */
+fun <T> LiveData<T>.toMutableLiveData():MutableLiveData<T>{
+    val liveData =  MutableLiveData<T>()
+    liveData.value = this.value
+    return liveData
+}
+
+/**
+ * Mapper function used in the operators that need mapping
+ */
+typealias MapperFunction<T,O> = (T)->O

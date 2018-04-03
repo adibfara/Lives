@@ -11,6 +11,9 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 
 
+/**
+ * Emits the items that are different from all the values that have been emitted so far
+ */
 fun <T> LiveData<T>.distinct(): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     val dispatchedValues = mutableListOf<T?>()
@@ -23,6 +26,9 @@ fun <T> LiveData<T>.distinct(): LiveData<T> {
     return mutableLiveData
 }
 
+/**
+ * Emits the items that are different from the last item
+ */
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     var latestValue : T? = null
@@ -35,6 +41,9 @@ fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
     return mutableLiveData
 }
 
+/**
+ * Emits the items that pass through the predicate
+ */
 inline fun <T> LiveData<T>.filter(crossinline predicate : (T?)->Boolean): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this, {
@@ -44,14 +53,16 @@ inline fun <T> LiveData<T>.filter(crossinline predicate : (T?)->Boolean): LiveDa
     return mutableLiveData
 }
 
+/**
+ * Emits at most 1 item and returns a SingleLiveData
+ */
 fun <T> LiveData<T>.first(): SingleLiveData<T> {
     return SingleLiveData(take(1))
 }
 
-fun <T> LiveData<T>.firstOrDefault(default:T): SingleLiveData<T> {
-    return SingleLiveData(take(1).map { it ?: default })
-}
-
+/**
+ * Emits the first n valueus
+ */
 fun <T> LiveData<T>.take(count:Int): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     var takenCount = 0
@@ -64,9 +75,12 @@ fun <T> LiveData<T>.take(count:Int): LiveData<T> {
     return mutableLiveData
 }
 
+/**
+ * Takes until a certain predicate is met, and does not emit anything after that, whatever the value.
+ */
 inline fun <T> LiveData<T>.takeUntil(crossinline predicate : (T?)->Boolean): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
-    var metPredicate = false
+    var metPredicate = predicate(value)
     mutableLiveData.addSource(this, {
         if(predicate(it)) metPredicate = true
         if(!metPredicate) {
@@ -76,6 +90,9 @@ inline fun <T> LiveData<T>.takeUntil(crossinline predicate : (T?)->Boolean): Liv
     return mutableLiveData
 }
 
+/**
+ * Skips the first n values
+ */
 fun <T> LiveData<T>.skip(count:Int): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     var skippedCount = 0
@@ -88,6 +105,9 @@ fun <T> LiveData<T>.skip(count:Int): LiveData<T> {
     return mutableLiveData
 }
 
+/**
+ * Skips all values until a certain predicate is met (the item that actives the predicate is also emitted)
+ */
 inline fun <T> LiveData<T>.skipUntil(crossinline predicate : (T?)->Boolean): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     var metPredicate = false
@@ -100,9 +120,14 @@ inline fun <T> LiveData<T>.skipUntil(crossinline predicate : (T?)->Boolean): Liv
     return mutableLiveData
 }
 
+/**
+ * Note: This only works for elements that were emitted `after` the `elementAt` is applied.
+ */
 fun <T> LiveData<T>.elementAt(index:Int): SingleLiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     var currentIndex = 0
+    if(this.value != null)
+        currentIndex = -1
     mutableLiveData.addSource(this, {
         if(currentIndex==index) {
             mutableLiveData.value = it
@@ -113,15 +138,16 @@ fun <T> LiveData<T>.elementAt(index:Int): SingleLiveData<T> {
     return SingleLiveData(mutableLiveData)
 }
 
-fun <T> LiveData<T>.nonNull():LiveData<T>{
-    val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
-    mutableLiveData.addSource(this, {
-        if(it!=null)
-            mutableLiveData.value = it
-    })
-    return mutableLiveData
+/**
+ * Emits only the values that are not null
+ */
+fun <T> LiveData<T>.nonNull():NonNullLiveData<T>{
+    return NonNullLiveData(this)
 }
 
+/**
+ * Emits the default value when a null value is emitted
+ */
 fun <T> LiveData<T>.defaultIfNull(default:T):LiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this, {
