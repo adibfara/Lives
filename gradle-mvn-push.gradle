@@ -16,7 +16,7 @@
 
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 version = VERSION_NAME
 group = GROUP
@@ -24,12 +24,12 @@ group = GROUP
 // Bintray
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
 bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
 
     configurations = ['archives']
+    dryRun = true
     pkg {
         repo = BINTRAY_REPO_NAME
         name = POM_ARTIFACT_ID
@@ -62,39 +62,8 @@ if (project.getPlugins().hasPlugin('com.android.application') ||
         project.getPlugins().hasPlugin('com.android.library')) {
     install {
         repositories.mavenInstaller {
+            customizePom(pom, project)
             configuration = configurations.archives
-            pom.withXml {
-                groupId = GROUP
-                artifactId = POM_ARTIFACT_ID
-                version = VERSION_NAME
-                project {
-                    name POM_NAME
-                    packaging POM_PACKAGING
-                    description POM_DESCRIPTION
-                    url POM_URL
-
-                    scm {
-                        url POM_SCM_URL
-                        connection POM_SCM_CONNECTION
-                        developerConnection POM_SCM_DEV_CONNECTION
-                    }
-
-                    licenses {
-                        license {
-                            name POM_LICENCE_NAME
-                            url POM_LICENCE_URL
-                            distribution POM_LICENCE_DIST
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id POM_DEVELOPER_ID
-                            name POM_DEVELOPER_NAME
-                        }
-                    }
-                }
-            }
 
         }
     }
@@ -118,6 +87,7 @@ if (project.getPlugins().hasPlugin('com.android.application') ||
 } else {
     install {
         repositories.mavenInstaller {
+            customizePom(pom, project)
             pom.groupId = GROUP
             pom.artifactId = POM_ARTIFACT_ID
             pom.version = VERSION_NAME
@@ -174,9 +144,113 @@ artifacts {
     if (project.getPlugins().hasPlugin('com.android.application') ||
             project.getPlugins().hasPlugin('com.android.library')) {
         archives androidSourcesJar
-        archives androidJavadocsJar
+        ///archives androidJavadocsJar
     } else {
         archives sourcesJar
         archives javadocJar
+    }
+}
+
+def customizePom(pom, gradleProject) {
+    publishing {
+        publications {
+            mavenAar(MavenPublication) {
+                artifact("$buildDir/outputs/aar/app-release.aar")
+                groupId = GROUP
+                artifactId = POM_ARTIFACT_ID
+                version = VERSION_NAME
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    // Iterate over the implementation dependencies (we don't want the test ones), adding a <dependency> node for each
+                    configurations.implementation.allDependencies.each {
+                        // Ensure dependencies such as fileTree are not included in the pom.
+                        if (it.name != 'unspecified') {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', GROUP)
+                            dependencyNode.appendNode('artifactId',POM_ARTIFACT_ID)
+                            dependencyNode.appendNode('version', VERSION_NAME)
+                        }
+                    }
+                    groupId = GROUP
+                    artifactId = POM_ARTIFACT_ID
+                    version = VERSION_NAME
+                    gradleProject {
+                        name POM_NAME
+                        packaging POM_PACKAGING
+                        description POM_DESCRIPTION
+                        url POM_URL
+
+                        scm {
+                            url POM_SCM_URL
+                            connection POM_SCM_CONNECTION
+                            developerConnection POM_SCM_DEV_CONNECTION
+                        }
+
+                        licenses {
+                            license {
+                                name POM_LICENCE_NAME
+                                url POM_LICENCE_URL
+                                distribution POM_LICENCE_DIST
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id POM_DEVELOPER_ID
+                                name POM_DEVELOPER_NAME
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+
+    pom.whenConfigured { generatedPom ->
+        // eliminate test-scoped dependencies (no need in maven central poms)
+        generatedPom.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // sort to make pom dependencies order consistent to ease comparison of older poms
+        generatedPom.dependencies = generatedPom.dependencies.sort { dep ->
+            "$dep.scope:$dep.groupId:$dep.artifactId"
+        }
+
+        // add all items necessary for maven central publication
+        generatedPom.project {
+            groupId = GROUP
+            artifactId = POM_ARTIFACT_ID
+            version = VERSION_NAME
+            gradleProject {
+                name POM_NAME
+                packaging POM_PACKAGING
+                description POM_DESCRIPTION
+                url POM_URL
+
+                scm {
+                    url POM_SCM_URL
+                    connection POM_SCM_CONNECTION
+                    developerConnection POM_SCM_DEV_CONNECTION
+                }
+
+                licenses {
+                    license {
+                        name POM_LICENCE_NAME
+                        url POM_LICENCE_URL
+                        distribution POM_LICENCE_DIST
+                    }
+                }
+
+                developers {
+                    developer {
+                        id POM_DEVELOPER_ID
+                        name POM_DEVELOPER_NAME
+                    }
+                }
+            }
+        }
     }
 }

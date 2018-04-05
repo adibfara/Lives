@@ -121,6 +121,7 @@ inline fun <T> LiveData<T>.skipUntil(crossinline predicate : (T?)->Boolean): Liv
 }
 
 /**
+ * emits the item that was emitted at `index` position
  * Note: This only works for elements that were emitted `after` the `elementAt` is applied.
  */
 fun <T> LiveData<T>.elementAt(index:Int): SingleLiveData<T> {

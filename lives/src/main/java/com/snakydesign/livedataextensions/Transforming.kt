@@ -13,14 +13,14 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 
 /**
- * maps any values that were emitted by the LiveData to the given function
+ * Maps any values that were emitted by the LiveData to the given function
  */
 fun <T,O> LiveData<T>.map(function : MapperFunction<T,O>):LiveData<O>{
     return Transformations.map(this,function)
 }
 
 /**
- * maps any values that were emitted by the LiveData to the given function that produces another LiveData
+ * Maps any values that were emitted by the LiveData to the given function that produces another LiveData
  */
 fun <T,O> LiveData<T>.switchMap(function : MapperFunction<T,LiveData<O>>):LiveData<O>{
     return Transformations.switchMap(this,function)
