@@ -13,6 +13,10 @@ android:
 # as per http://blog.travis-ci.com/2014-12-17-faster-builds-with-container-based-infrastructure/
 sudo: false
 
+before_script:
+   # Create and start an emulator for instrumentation tests.
+    - chmod +x gradlew
+    - chmod +x ./travis_build.sh
 # script for build and release via Travis to Bintray
 script: ./travis_build.sh
 
