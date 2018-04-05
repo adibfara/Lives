@@ -32,6 +32,6 @@ notifications:
 # cache between builds
 cache:
   directories:
-  - "$HOME/.m2"
-  - "$HOME/.gradle"
-  - "$HOME/gcloud-sdk/"
+    - "$HOME/.m2"
+    - "$HOME/.gradle"
+    - "$HOME/gcloud-sdk/"
