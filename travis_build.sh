@@ -1,3 +1,3 @@
 #!/bin/bash
-./gradlew assembleDebug
+./gradlew build
 ./gradlew test

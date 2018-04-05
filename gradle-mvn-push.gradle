@@ -24,35 +24,38 @@ group = GROUP
 // Bintray
 bintray {
     Properties properties = new Properties()
-    properties.load(project.rootProject.file('local.properties').newDataInputStream())
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    if (project.rootProject.file('local.properties').exists()) {
 
-    configurations = ['archives']
-    dryRun = true
-    pkg {
-        repo = BINTRAY_REPO_NAME
-        name = POM_ARTIFACT_ID
-        desc = POM_DESCRIPTION
-        websiteUrl = POM_URL
-        issueTrackerUrl = POM_ISSUE_URL
-        vcsUrl = POM_SCM_URL
-        licenses = ["Apache-2.0"]
-        publish = true
-        publicDownloadNumbers = true
-        version {
+        properties.load(project.rootProject.file('local.properties').newDataInputStream())
+        user = properties.getProperty("bintray.user")
+        key = properties.getProperty("bintray.apikey")
+
+        configurations = ['archives']
+        dryRun = true
+        pkg {
+            repo = BINTRAY_REPO_NAME
+            name = POM_ARTIFACT_ID
             desc = POM_DESCRIPTION
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.password")
-                //Optional. The passphrase for GPG signing'
-            }
+            websiteUrl = POM_URL
+            issueTrackerUrl = POM_ISSUE_URL
+            vcsUrl = POM_SCM_URL
+            licenses = ["Apache-2.0"]
+            publish = true
+            publicDownloadNumbers = true
+            version {
+                desc = POM_DESCRIPTION
+                gpg {
+                    sign = true //Determines whether to GPG sign the files. The default is false
+                    passphrase = properties.getProperty("bintray.gpg.password")
+                    //Optional. The passphrase for GPG signing'
+                }
 
-            mavenCentralSync {
-                sync = true
-                user = properties.getProperty("bintray.oss.user")
-                password = properties.getProperty("bintray.oss.password")
-                close = '1'
+                mavenCentralSync {
+                    sync = true
+                    user = properties.getProperty("bintray.oss.user")
+                    password = properties.getProperty("bintray.oss.password")
+                    close = '1'
+                }
             }
         }
     }
