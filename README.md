@@ -1,5 +1,5 @@
-Lives - LiveData Extensions for Kotlin and Java
---------
+Lives - Android LiveData Extensions for Kotlin and Java
+-------------------------------------------------------
 Add RxJava-like operators to your LiveData objects with ease, usable in Kotlin (as extension functions) and Java (as static functions to a class called Lives)
 
 Download
