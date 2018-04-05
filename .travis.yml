@@ -14,7 +14,7 @@ android:
 sudo: false
 
 # script for build and release via Travis to Bintray
-script: travis_build.sh
+script: ./travis_build.sh
 
 notifications:
   email: false
