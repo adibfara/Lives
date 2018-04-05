@@ -94,7 +94,7 @@ You can call any function prefixed with `Lives` keyword.
 
  - Example (create a LiveData with the initial value of 2 and map each value to its String type
     ```kotlin
-    LiveData<Integer> liveData = Lives.map(Lives.just(2), new Function1<Integer, String>() {
+    LiveData<String> liveData = Lives.map(Lives.just(2), new Function1<Integer, String>() {
                 @Override
                 public Integer invoke(Integer integer) {
                     return String.valueOf(integer);
