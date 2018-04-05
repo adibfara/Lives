@@ -13,18 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+if (project.rootProject.file('local.properties').exists()) {
+    apply plugin: 'com.jfrog.bintray'
+    apply plugin: 'com.github.dcendents.android-maven'
+    apply plugin: 'maven-publish'
 
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'maven-publish'
-
-version = VERSION_NAME
-group = GROUP
+    version = VERSION_NAME
+    group = GROUP
 
 // Bintray
-bintray {
-    Properties properties = new Properties()
-    if (project.rootProject.file('local.properties').exists()) {
+    bintray {
+        Properties properties = new Properties()
 
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         user = properties.getProperty("bintray.user")
@@ -58,102 +57,104 @@ bintray {
                 }
             }
         }
+
     }
-}
 
-if (project.getPlugins().hasPlugin('com.android.application') ||
-        project.getPlugins().hasPlugin('com.android.library')) {
-    install {
-        repositories.mavenInstaller {
-            customizePom(pom, project)
-            configuration = configurations.archives
+    if (project.getPlugins().hasPlugin('com.android.application') ||
+            project.getPlugins().hasPlugin('com.android.library')) {
+        install {
+            repositories.mavenInstaller {
+                customizePom(pom, project)
+                configuration = configurations.archives
 
+            }
         }
-    }
 
-    task androidJavadocs(type: Javadoc) {
-        source = android.sourceSets.main.java.source
-        options.addStringOption('Xdoclint:none', '-quiet')
-        options.addStringOption('encoding', 'UTF-8')
-        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    }
+        task androidJavadocs(type: Javadoc) {
+            source = android.sourceSets.main.java.source
+            options.addStringOption('Xdoclint:none', '-quiet')
+            options.addStringOption('encoding', 'UTF-8')
+            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        }
 
-    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-        classifier = 'javadoc'
-        from androidJavadocs.destinationDir
-    }
+        task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+            classifier = 'javadoc'
+            from androidJavadocs.destinationDir
+        }
 
-    task androidSourcesJar(type: Jar) {
-        classifier = 'sources'
-        from android.sourceSets.main.java.source
-    }
-} else {
-    install {
-        repositories.mavenInstaller {
-            customizePom(pom, project)
-            pom.groupId = GROUP
-            pom.artifactId = POM_ARTIFACT_ID
-            pom.version = VERSION_NAME
-            pom.project {
-                name POM_NAME
-                packaging POM_PACKAGING
-                description POM_DESCRIPTION
-                url POM_URL
+        task androidSourcesJar(type: Jar) {
+            classifier = 'sources'
+            from android.sourceSets.main.java.source
+        }
+    } else {
+        install {
+            repositories.mavenInstaller {
+                customizePom(pom, project)
+                pom.groupId = GROUP
+                pom.artifactId = POM_ARTIFACT_ID
+                pom.version = VERSION_NAME
+                pom.project {
+                    name POM_NAME
+                    packaging POM_PACKAGING
+                    description POM_DESCRIPTION
+                    url POM_URL
 
-                scm {
-                    url POM_SCM_URL
-                    connection POM_SCM_CONNECTION
-                    developerConnection POM_SCM_DEV_CONNECTION
-                }
-
-                licenses {
-                    license {
-                        name POM_LICENCE_NAME
-                        url POM_LICENCE_URL
-                        distribution POM_LICENCE_DIST
+                    scm {
+                        url POM_SCM_URL
+                        connection POM_SCM_CONNECTION
+                        developerConnection POM_SCM_DEV_CONNECTION
                     }
-                }
 
-                developers {
-                    developer {
-                        id POM_DEVELOPER_ID
-                        name POM_DEVELOPER_NAME
+                    licenses {
+                        license {
+                            name POM_LICENCE_NAME
+                            url POM_LICENCE_URL
+                            distribution POM_LICENCE_DIST
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id POM_DEVELOPER_ID
+                            name POM_DEVELOPER_NAME
+                        }
                     }
                 }
             }
         }
-    }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+        task sourcesJar(type: Jar, dependsOn: classes) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
-        from javadoc.destinationDir
-    }
-}
-
-if (JavaVersion.current().isJava8Compatible()) {
-    allprojects {
-        tasks.withType(Javadoc) {
-            options.addStringOption('Xdoclint:none', '-quiet')
+        task javadocJar(type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
         }
     }
-}
 
-artifacts {
-    if (project.getPlugins().hasPlugin('com.android.application') ||
-            project.getPlugins().hasPlugin('com.android.library')) {
-        archives androidSourcesJar
-        ///archives androidJavadocsJar
-    } else {
-        archives sourcesJar
-        archives javadocJar
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
     }
-}
 
+    artifacts {
+        if (project.getPlugins().hasPlugin('com.android.application') ||
+                project.getPlugins().hasPlugin('com.android.library')) {
+            archives androidSourcesJar
+            ///archives androidJavadocsJar
+        } else {
+            archives sourcesJar
+            archives javadocJar
+        }
+    }
+
+
+}
 def customizePom(pom, gradleProject) {
     publishing {
         publications {
@@ -171,7 +172,7 @@ def customizePom(pom, gradleProject) {
                         if (it.name != 'unspecified') {
                             def dependencyNode = dependenciesNode.appendNode('dependency')
                             dependencyNode.appendNode('groupId', GROUP)
-                            dependencyNode.appendNode('artifactId',POM_ARTIFACT_ID)
+                            dependencyNode.appendNode('artifactId', POM_ARTIFACT_ID)
                             dependencyNode.appendNode('version', VERSION_NAME)
                         }
                     }
