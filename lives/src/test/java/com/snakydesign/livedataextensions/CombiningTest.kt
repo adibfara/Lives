@@ -9,7 +9,7 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyNoMoreInteractions
 
 /**
- * Created by Adib Faramarzi (adibfara@gmail.com) - 03/04/2018
+ * Created by Adib Faramarzi
  */
 class CombiningTest {
 

@@ -14,7 +14,7 @@ import org.mockito.Mockito.*
 import org.mockito.verification.VerificationMode
 
 /**
- * Created by Adib Faramarzi (adibfara@gmail.com) - 03/04/2018
+ * Created by Adib Faramarzi (adibfara@gmail.com)
  */
 class TransformingTest {
 

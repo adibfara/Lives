@@ -1,11 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-
 android {
     compileSdkVersion 27
-
-
-
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
@@ -13,7 +9,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        testApplicationId "com.test.foo"
+        testApplicationId "com.snakydesign.livedataextensions.test"
         // Specifies the fully-qualified class name of the test instrumentation runner.
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
 
@@ -45,13 +41,14 @@ afterEvaluate {
         }
     }
 }
+
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation  'junit:junit:4.12'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    api 'android.arch.lifecycle:extensions:1.1.1'
     testImplementation 'org.mockito:mockito-core:2.8.9'
     testImplementation("android.arch.core:core-testing:1.1.1", {
         exclude group: 'com.android.support', module: 'support-compat'
@@ -60,52 +57,4 @@ dependencies {
     })
 }
 
-
-apply plugin: 'maven'
-
-group = 'com.snakydesign.livedataextensions'
-version = '1.0'
-
-ext {
-    //Specify your maven repository url here
-    repositoryUrl = 'ftp://your.maven.repository.com/maven2'
-    //Or you can use 'file:\\\\C:\\Temp' or 'maven-temp' for a local maven repository
-}
-configurations {
-    deployerJars
-}
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    destinationDir = file("../javadoc/")
-    failOnError false
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-//Creating sources with comments
-task androidSourcesJar(type: Jar) {
-    classifier = 'sources'
-    from android.sourceSets.main.java.srcDirs
-}
-
-//Put the androidSources and javadoc to the artifacts
-artifacts {
-    archives androidSourcesJar
-    archives javadocJar
-}
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            configuration = configurations.deployerJars
-            repository(url: repositoryUrl) {
-                //if your repository needs authentication
-                authentication(userName: "username", password: "password")
-            }
-        }
-    }
-}
+apply from: rootProject.file('./gradle-mvn-push.gradle')

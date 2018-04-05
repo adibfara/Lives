@@ -10,7 +10,7 @@ import org.junit.Test
 import org.mockito.Mockito
 
 /**
- * Created by Adib Faramarzi (adibfara@gmail.com) - 03/04/2018
+ * Created by Adib Faramarzi
  */
 class CreatingTest {
 

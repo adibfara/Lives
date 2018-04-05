@@ -1,6 +1,6 @@
 Lives - LiveData Extensions for Kotlin and Java
 --------
-Adds RxJava-like operators like just, filter, merge ,zip and more to your LiveData objects.
+Still developing.
 
 License
 =======

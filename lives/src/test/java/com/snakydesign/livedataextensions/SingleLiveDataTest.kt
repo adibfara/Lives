@@ -7,7 +7,7 @@ import org.junit.Test
 import org.junit.Assert.*
 
 /**
- * Created by Adib Faramarzi (adibfara@gmail.com) - 03/04/2018
+ * Created by Adib Faramarzi (adibfara@gmail.com)
  */
 class SingleLiveDataTest {
 

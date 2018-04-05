@@ -1,1 +1,1 @@
-include ':livedataextensions'
+include ':lives', ':testapplication'

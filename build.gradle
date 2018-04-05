@@ -5,12 +5,14 @@ buildscript {
         mavenCentral()
         google()
         jcenter()
+        maven { url "https://dl.bintray.com/adibfara/lives" }
     }
     ext.kotlin_version = '1.2.31'
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.android.tools.build:gradle:3.1.0'
-        
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,9 +23,9 @@ allprojects {
         mavenCentral()
         google()
         jcenter()
+        maven { url "https://dl.bintray.com/adibfara/lives" }
     }
 }
-
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

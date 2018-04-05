@@ -9,7 +9,7 @@ import org.mockito.Mockito.times
 import kotlin.test.assertEquals
 
 /**
- * Created by Adib Faramarzi (adibfara@gmail.com) - 03/04/2018
+ * Created by Adib Faramarzi
  */
 class FilteringTest {
 
