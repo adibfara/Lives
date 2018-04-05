@@ -58,15 +58,14 @@ Usage
     originalLiveData.value = 2 // newLiveData will not produce this
 ```
 
-- More:
-  - `first()` : produces a SingleLiveData that produces only one Item.
-  - `take(n:Int)` : produces a LiveData that produces only the first n Items.
-  -` takeUntil(predicate)` : Takes until a certain predicate is met, and does not emit anything after that, whatever the value.
-  - `skip(n)` : Skips the first n values.
-  - `skipUntil(predicate)` : Skips all values until a certain predicate is met (the item that actives the predicate is also emitted).
-  - `elementAt(index)` : emits the item that was emitted at `index` position
-  - `nonNull()` : Will never emit the nulls to the observers (outputs a `NonNullLiveData`).
-  - `defaultIfNull(value)`: Will produce the `value` when `null` is recieved.
+- `first()` : produces a SingleLiveData that produces only one Item.
+- `take(n:Int)` : produces a LiveData that produces only the first n Items.
+- ` takeUntil(predicate)` : Takes until a certain predicate is met, and does not emit anything after that, whatever the value.
+- `skip(n)` : Skips the first n values.
+- `skipUntil(predicate)` : Skips all values until a certain predicate is met (the item that actives the predicate is also emitted).
+- `elementAt(index)` : emits the item that was emitted at `index` position
+- `nonNull()` : Will never emit the nulls to the observers (outputs a `NonNullLiveData`).
+- `defaultIfNull(value)`: Will produce the `value` when `null` is recieved.
 
 **Combining**
 
