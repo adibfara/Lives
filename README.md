@@ -2,37 +2,10 @@ Lives - LiveData Extensions for Kotlin and Java
 --------
 Adds RxJava-like operators like just, filter, merge ,zip and more to your LiveData objects.
 
-Download
---------
-
-Add the dependencies via Gradle (or Maven):
-```groovy
-implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-```
-
-
-ProGuard
---------
-
-If you are using ProGuard you need to add the following options:
-```
-# Retain generic type information for use by reflection by converters and adapters.
--keepattributes Signature
-# Retain service method parameters.
--keepclassmembernames,allowobfuscation interface * {
-    @retrofit2.http.* <methods>;
-}
-# Ignore annotation used for build tooling.
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
-```
-
-You might also need rules for OkHttp and Okio which are dependencies.
-
-
 License
 =======
 
-    Copyright 2013 Square, Inc.
+    Copyright 2018 Adib Faramarzi.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
