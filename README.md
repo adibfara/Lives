@@ -6,8 +6,15 @@ Add RxJava-like operators to your LiveData objects with ease, usable in Kotlin (
 
 Download
 --------
+ 1. Add this project's maven to the build script repositories:
+    ```groovy
+    maven { url "https://dl.bintray.com/adibfara/lives" }
+    ```
+ 2. Add the dependencies to your project:
+    ```groovy
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.snakydesign.livedataextensions:lives:1.0.0'
+    ```
 
 Usage
 --------
@@ -108,9 +115,6 @@ Please note that because of design of `LiveData`, after a value is emitted to an
 
 So If you want to use operators like `concat`, you have to consider allowing only one observer to the LiveData.
 
-#### TODO
-    concat()
-    concatWith()
 License
 =======
 
@@ -127,8 +131,3 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-
-
- [1]: https://square.github.io/retrofit/
- [2]: https://search.maven.org/remote_content?g=com.squareup.retrofit2&a=retrofit&v=LATEST
- [snap]: https://oss.sonatype.org/content/repositories/snapshots/

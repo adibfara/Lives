@@ -24,13 +24,13 @@ if (project.rootProject.file('local.properties').exists()) {
 // Bintray
     bintray {
         Properties properties = new Properties()
-
+        println("starting bintray")
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         user = properties.getProperty("bintray.user")
         key = properties.getProperty("bintray.apikey")
 
         configurations = ['archives']
-        dryRun = true
+        dryRun = false
         pkg {
             repo = BINTRAY_REPO_NAME
             name = POM_ARTIFACT_ID
@@ -40,6 +40,7 @@ if (project.rootProject.file('local.properties').exists()) {
             vcsUrl = POM_SCM_URL
             licenses = ["Apache-2.0"]
             publish = true
+
             publicDownloadNumbers = true
             version {
                 desc = POM_DESCRIPTION
