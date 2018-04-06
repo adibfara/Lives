@@ -3,7 +3,6 @@ package com.snakydesign.livedataextensions.livedata
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.Observer
-import android.support.annotation.NonNull
 
 /**
  * Created by Adib Faramarzi

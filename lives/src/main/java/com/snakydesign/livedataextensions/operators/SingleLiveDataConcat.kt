@@ -1,8 +1,6 @@
 package com.snakydesign.livedataextensions.operators
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 /**

@@ -11,6 +11,7 @@ import kotlin.test.assertEquals
 /**
  * Created by Adib Faramarzi
  */
+@Suppress("UNCHECKED_CAST")
 class FilteringTest {
 
 

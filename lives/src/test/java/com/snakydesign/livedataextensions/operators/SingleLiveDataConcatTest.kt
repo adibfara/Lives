@@ -5,9 +5,8 @@ import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import com.snakydesign.livedataextensions.concat
-import com.snakydesign.livedataextensions.merge
 import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.*
@@ -15,6 +14,7 @@ import org.mockito.Mockito.*
 /**
  * Created by Adib Faramarzi
  */
+@Suppress("UNCHECKED_CAST")
 class SingleLiveDataConcatTest<T> : MediatorLiveData<T>(){
     @Rule
     @JvmField

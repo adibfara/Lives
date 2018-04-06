@@ -3,18 +3,14 @@ package com.snakydesign.livedataextensions.livedata
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import com.snakydesign.livedataextensions.first
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.mockito.Mockito
 
 /**
  * Created by Adib Faramarzi
  */
+@Suppress("UNCHECKED_CAST")
 class SingleLiveDataTest {
     @Rule
     @JvmField

@@ -3,18 +3,15 @@ package com.snakydesign.livedataextensions.livedata
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import com.snakydesign.livedataextensions.merge
 import com.snakydesign.livedataextensions.nonNull
-import org.junit.Assert
-import org.junit.Test
-
-import org.junit.Assert.*
 import org.junit.Rule
+import org.junit.Test
 import org.mockito.Mockito
 
 /**
  * Created by Adib Faramarzi (adibfara@gmail.com) - 06/04/2018
  */
+@Suppress("UNCHECKED_CAST")
 class NonNullLiveDataTest {
 
     @Rule

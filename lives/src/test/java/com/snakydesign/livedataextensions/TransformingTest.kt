@@ -4,18 +4,17 @@ import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.verification.VerificationMode
 
 /**
  * Created by Adib Faramarzi (adibfara@gmail.com)
  */
+@Suppress("UNCHECKED_CAST")
 class TransformingTest {
 
 
@@ -47,7 +46,7 @@ class TransformingTest {
     @Test
     fun `test LiveData filter multiple items`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val originalLiveData = just<Int>(2)
+        val originalLiveData = just(2)
         val testingLiveData = originalLiveData.filter {
             it!=null && it > 10
         }

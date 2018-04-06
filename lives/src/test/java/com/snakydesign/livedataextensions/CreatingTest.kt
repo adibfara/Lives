@@ -12,6 +12,7 @@ import org.mockito.Mockito
 /**
  * Created by Adib Faramarzi
  */
+@Suppress("UNCHECKED_CAST")
 class CreatingTest {
 
     @Rule

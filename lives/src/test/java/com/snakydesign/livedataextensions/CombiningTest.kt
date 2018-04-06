@@ -11,6 +11,7 @@ import org.mockito.Mockito.verifyNoMoreInteractions
 /**
  * Created by Adib Faramarzi
  */
+@Suppress("UNCHECKED_CAST")
 class CombiningTest {
     @Rule
     @JvmField
