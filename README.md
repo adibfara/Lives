@@ -6,15 +6,12 @@ Add RxJava-like operators to your LiveData objects with ease, usable in Kotlin (
 
 Download
 --------
- 1. Add this project's maven to the build script repositories:
-    ```groovy
-    maven { url "https://dl.bintray.com/adibfara/lives" }
-    ```
- 2. Add the dependencies to your project:
-    ```groovy
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation 'com.snakydesign.livedataextensions:lives:1.0.0'
-    ```
+Add the dependencies to your project:
+
+```groovy
+implementation 'android.arch.lifecycle:extensions:1.1.1'
+implementation 'com.snakydesign.livedataextensions:lives:1.0.0'
+```
 
 Usage
 --------
