@@ -11,6 +11,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
+import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 /**
  * Maps any values that were emitted by the LiveData to the given function
@@ -109,7 +110,7 @@ fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): Mu
 /**
  * Converts a LiveData to a SingleLiveData (exactly similar to LiveData.first()
  */
-fun <T> LiveData<T>.toSingleLiveData():SingleLiveData<T> = first()
+fun <T> LiveData<T>.toSingleLiveData(): SingleLiveData<T> = first()
 
 /**
  * Converts a LiveData to a MutableLiveData with the initial value set by this LiveData's value

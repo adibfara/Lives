@@ -12,8 +12,6 @@ import org.mockito.Mockito.verifyNoMoreInteractions
  * Created by Adib Faramarzi
  */
 class CombiningTest {
-
-
     @Rule
     @JvmField
     val rule = InstantTaskExecutorRule()

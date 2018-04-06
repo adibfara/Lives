@@ -1,35 +1,28 @@
-package com.snakydesign.livedataextensions
+package com.snakydesign.livedataextensions.livedata
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.Observer
+import android.support.annotation.NonNull
 
 /**
  * Created by Adib Faramarzi
- * Emits at most one item
+ * Only emits values that are not null
  */
-class SingleLiveData<T>(liveData: LiveData<T>) : LiveData<T>() {
-    private var hasSetValue = false
+class NonNullLiveData<T>(liveData:LiveData<T>) : LiveData<T>() {
     private val mediatorLiveData = MediatorLiveData<T>()
     private val mediatorObserver = Observer<T> {
-        if(!hasSetValue){
-            hasSetValue=true
-            this@SingleLiveData.value = it
+        it?.let{
+            this@NonNullLiveData.value = it
         }
     }
     init {
-        if(liveData.value!=null){
-            hasSetValue=true
-            this.value = value
-        }else {
             mediatorLiveData.observeForever(mediatorObserver)
             mediatorLiveData.addSource(liveData, mediatorObserver)
-        }
     }
     override fun onInactive() {
         super.onInactive()
         mediatorLiveData.removeObserver(mediatorObserver)
     }
-
 
 }

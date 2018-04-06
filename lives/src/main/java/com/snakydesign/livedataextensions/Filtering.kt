@@ -9,6 +9,8 @@ package com.snakydesign.livedataextensions
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import com.snakydesign.livedataextensions.livedata.NonNullLiveData
+import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 
 /**
@@ -57,7 +59,7 @@ inline fun <T> LiveData<T>.filter(crossinline predicate : (T?)->Boolean): LiveDa
  * Emits at most 1 item and returns a SingleLiveData
  */
 fun <T> LiveData<T>.first(): SingleLiveData<T> {
-    return SingleLiveData(take(1))
+    return SingleLiveData(this)
 }
 
 /**
@@ -142,7 +144,7 @@ fun <T> LiveData<T>.elementAt(index:Int): SingleLiveData<T> {
 /**
  * Emits only the values that are not null
  */
-fun <T> LiveData<T>.nonNull():NonNullLiveData<T>{
+fun <T> LiveData<T>.nonNull(): NonNullLiveData<T> {
     return NonNullLiveData(this)
 }
 

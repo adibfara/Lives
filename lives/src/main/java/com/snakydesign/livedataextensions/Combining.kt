@@ -9,6 +9,8 @@ package com.snakydesign.livedataextensions
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.Observer
+import com.snakydesign.livedataextensions.livedata.SingleLiveData
+import com.snakydesign.livedataextensions.operators.SingleLiveDataConcat
 
 /**
  * Merges this LiveData with another one, and emits any item that was emitted by any of them
@@ -132,4 +134,37 @@ fun <T,Y,X> zip(first : LiveData<T>, second : LiveData<Y>, third : LiveData<X>):
     })
     
     return finalLiveData
+}
+
+/**
+ * Converts the LiveData to `SingleLiveData` and concats it with the `otherLiveData` and emits their
+ * values one by one
+ */
+fun <T> LiveData<T>.then(otherLiveData:LiveData<T>):LiveData<T>{
+    return if (this is SingleLiveData){
+        when (otherLiveData) {
+            is SingleLiveData -> SingleLiveDataConcat(this,otherLiveData)
+            else -> SingleLiveDataConcat(this,otherLiveData.toSingleLiveData())
+        }
+    }else{
+        when (otherLiveData) {
+            is SingleLiveData -> SingleLiveDataConcat(this.toSingleLiveData(),otherLiveData)
+            else -> SingleLiveDataConcat(this.toSingleLiveData(),otherLiveData.toSingleLiveData())
+        }
+    }
+}
+fun <T> LiveData<T>.concatWith(otherLiveData:LiveData<T>) = then(otherLiveData)
+
+/**
+ * Concats the given LiveData together and emits their values one by one in order
+ */
+fun <T> concat(vararg liveData:LiveData<T>):LiveData<T>{
+    val liveDataList = mutableListOf<SingleLiveData<T>>()
+    liveData.forEach {
+        if( it is SingleLiveData<T>)
+            liveDataList.add(it)
+        else
+            liveDataList.add(it.toSingleLiveData())
+    }
+    return SingleLiveDataConcat(liveDataList)
 }
