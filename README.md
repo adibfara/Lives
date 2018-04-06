@@ -69,7 +69,7 @@ Usage
 
 - `first()` : produces a SingleLiveData that produces only one Item.
 - `take(n:Int)` : produces a LiveData that produces only the first n Items.
-- ` takeUntil(predicate)` : Takes until a certain predicate is met, and does not emit anything after that, whatever the value.
+- `takeUntil(predicate)` : Takes until a certain predicate is met, and does not emit anything after that, whatever the value.
 - `skip(n)` : Skips the first n values.
 - `skipUntil(predicate)` : Skips all values until a certain predicate is met (the item that actives the predicate is also emitted).
 - `elementAt(index)` : emits the item that was emitted at `index` position
@@ -79,6 +79,9 @@ Usage
 **Combining**
 
 - `merge(List<LiveData>)` : Merges multiple LiveData, and emits any item that was emitted by any of them
+- `LiveData.merge(LiveData)` : Merges this LiveData with another one, and emits any item that was emitted by any of them
+- `concat(LiveData...)` : Concats multiple LiveData objects (and converts them to `SingleLiveData` if necessary, and emits their first item in order. (Please check the note below.)
+- `LiveData.then(LiveData)` : Concats the first LiveData with the given one. (Please check the note below.)
 - `LiveData.merge(LiveData)` : Merges this LiveData with another one, and emits any item that was emitted by any of them
 - `startWith(startingValue)`: Emits the `startingValue` before any other value.
 - `zip(firstLiveData, secondLiveData)`: zips both of the LiveData and emits a value after both of them have emitted their values, after that, emits values whenever any of them emits a value.
