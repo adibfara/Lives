@@ -102,6 +102,12 @@ You can call any function prefixed with `Lives` keyword.
             }) ;
     ```
 
+#### Notes
+
+Please note that because of design of `LiveData`, after a value is emitted to an observer, and then another value is emitted, the old value is destroyed in any LiveData object. So unlike RxJava, if a new Observer is attached, It will only receive the most recent value.
+
+So If you want to use operators like `concat`, you have to consider allowing only one observer to the LiveData.
+
 #### TODO
     concat()
     concatWith()

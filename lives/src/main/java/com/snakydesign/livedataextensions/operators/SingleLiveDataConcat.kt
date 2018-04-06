@@ -7,6 +7,7 @@ import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 /**
  * Created by Adib Faramarzi (adibfara@gmail.com)
+ * Can be used for concating multiple LiveData objects
  */
 class SingleLiveDataConcat<T>(liveDataList:List<SingleLiveData<T>>): MediatorLiveData<T>() {
     constructor(vararg liveData:SingleLiveData<T>):this(liveData.toList())
@@ -28,11 +29,12 @@ class SingleLiveDataConcat<T>(liveDataList:List<SingleLiveData<T>>): MediatorLiv
         }
     }
 
+    /**
+     * Emits the item that are in the `queue`
+     */
     private fun checkEmit(){
-        if(lastEmittedLiveDataIndex >= emittedValues.size)
-            return
         synchronized(hasEmittedValues){
-            while (hasEmittedValues[lastEmittedLiveDataIndex+1]){
+            while (lastEmittedLiveDataIndex < emittedValues.size-1 && hasEmittedValues[lastEmittedLiveDataIndex+1]){
                 value = emittedValues[lastEmittedLiveDataIndex+1]
                 lastEmittedLiveDataIndex += 1
             }
