@@ -33,6 +33,11 @@ Usage
     val liveData = from {computePI()}
 ```
 
+- `empty` : Creates an empty LiveData.
+```kotlin
+    val liveData = empty()
+```
+
 
 **Filtering**
 
