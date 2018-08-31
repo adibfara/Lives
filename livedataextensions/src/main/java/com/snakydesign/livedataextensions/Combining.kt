@@ -9,7 +9,6 @@ package com.snakydesign.livedataextensions
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
 
 /**
  * Merges this LiveData with another one, and emits any item that was emitted by any of them
@@ -33,9 +32,9 @@ fun <T> merge(liveDataList: List<LiveData<T>>): LiveData<T> {
             finalLiveData.value = it
         }
 
-        finalLiveData.addSource(liveData, { source ->
+        finalLiveData.addSource(liveData) { source ->
             finalLiveData.value = source
-        })
+        }
     }
     return finalLiveData
 }
@@ -46,9 +45,9 @@ fun <T> merge(liveDataList: List<LiveData<T>>): LiveData<T> {
 fun <T> LiveData<T>.startWith(startingValue: T?): LiveData<T> {
     val finalLiveData: MediatorLiveData<T> = MediatorLiveData()
     finalLiveData.value = startingValue
-    finalLiveData.addSource(this, { source ->
+    finalLiveData.addSource(this) { source ->
         finalLiveData.value = source
-    })
+    }
     return finalLiveData
 }
 
@@ -60,35 +59,39 @@ fun <T> LiveData<T>.startWith(startingValue: T?): LiveData<T> {
  * objects have a new value, but combineLatest will emit after any of them has a new value.
  */
 fun <T, Y> zip(first: LiveData<T>, second: LiveData<Y>): LiveData<Pair<T, Y>> {
-    val finalLiveData: MediatorLiveData<Pair<T, Y>> = MediatorLiveData()
+    return zip(first, second) { t, y -> Pair(t, y) }
+}
+
+fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, mapper: (T, Y) -> Z): LiveData<Z> {
+    val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
     var firstValue: T? = null
 
     var secondEmitted = false
     var secondValue: Y? = null
-    finalLiveData.addSource(first, { value ->
+    finalLiveData.addSource(first) { value ->
         firstEmitted = true
         firstValue = value
-        synchronized(finalLiveData, {
+        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = Pair(firstValue!!, secondValue!!)
+                finalLiveData.value = mapper(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
             }
-        })
-    })
-    finalLiveData.addSource(second, { value ->
+        }
+    }
+    finalLiveData.addSource(second) { value ->
         secondEmitted = true
         secondValue = value
-        synchronized(finalLiveData, {
+        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = Pair(firstValue!!, secondValue!!)
+                finalLiveData.value = mapper(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
             }
-        })
-    })
+        }
+    }
     return finalLiveData
 }
 
@@ -100,8 +103,8 @@ fun <T, Y> zip(first: LiveData<T>, second: LiveData<Y>): LiveData<Pair<T, Y>> {
  * The difference between combineLatest and zip is that the zip only emits after all LiveData
  * objects have a new value, but combineLatest will emit after any of them has a new value.
  */
-fun <T, Y, X> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>): LiveData<Triple<T, Y, X>> {
-    val finalLiveData: MediatorLiveData<Triple<T, Y, X>> = MediatorLiveData()
+fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>, mapper: (T, Y, X) -> Z): LiveData<Z> {
+    val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
     var firstValue: T? = null
@@ -111,40 +114,44 @@ fun <T, Y, X> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>): 
 
     var thirdEmitted = false
     var thirdValue: X? = null
-    finalLiveData.addSource(first, { value ->
+    finalLiveData.addSource(first) { value ->
         firstEmitted = true
         firstValue = value
         if (firstEmitted && secondEmitted && thirdEmitted) {
-            finalLiveData.value = Triple(firstValue!!, secondValue!!, thirdValue!!)
+            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
         }
-    })
+    }
 
-    finalLiveData.addSource(second, { value ->
+    finalLiveData.addSource(second) { value ->
         secondEmitted = true
         secondValue = value
         if (firstEmitted && secondEmitted && thirdEmitted) {
-            finalLiveData.value = Triple(firstValue!!, secondValue!!, thirdValue!!)
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
+            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
         }
-    })
+    }
 
-    finalLiveData.addSource(third, { value ->
+    finalLiveData.addSource(third) { value ->
         thirdEmitted = true
         thirdValue = value
         if (firstEmitted && secondEmitted && thirdEmitted) {
-            finalLiveData.value = Triple(firstValue!!, secondValue!!, thirdValue!!)
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
+            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
         }
-    })
+    }
 
     return finalLiveData
+}
+
+fun <T, Y, X> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>): LiveData<Triple<T, Y, X>> {
+    return zip(first, second, third) { t, y, x -> Triple(t, y, x) }
 }
 
 /**
