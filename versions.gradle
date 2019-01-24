@@ -1,0 +1,27 @@
+ext.versionNumbers = [
+        gradle     : '3.3.0',
+        jfrog      : '4.7.5',
+
+        kotlin     : '1.3.20',
+        mockito    : '2.8.9',
+        arch       : '1.1.1',
+        junit      : '4.12',
+
+        minSdk     : 16,
+        targetSdk  : 26,
+        versionCode: 2,
+        versionName: '1.1',
+]
+
+ext.libraries = [
+        gradle     : "com.android.tools.build:gradle:$versionNumbers.gradle",
+        jfrog      : "org.jfrog.buildinfo:build-info-extractor-gradle:$versionNumbers.jfrog",
+        kotlinGradle      : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionNumbers.kotlin",
+
+        kotlinSTDLib     : "org.jetbrains.kotlin:kotlin-stdlib:$versionNumbers.kotlin",
+        kotlinTestJunit     : "org.jetbrains.kotlin:kotlin-test-junit:$versionNumbers.kotlin",
+        mockito    : "org.mockito:mockito-core:$versionNumbers.mockito",
+        archLifeCycle       : "android.arch.lifecycle:extensions:$versionNumbers.arch",
+        archCoreTesting       : "android.arch.core:core-testing:$versionNumbers.arch",
+        junit      : "junit:junit:$versionNumbers.junit",
+]

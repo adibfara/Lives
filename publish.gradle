@@ -1,0 +1,31 @@
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+def artifactoryUrl = "https://api.bintray.com/maven/adibfara/lives/"
+apply from: rootProject.file('versions.gradle')
+
+publishing.publications {
+    aar(MavenPublication) {
+        groupId "com.snakydesign.livedataextensions"
+        version = versionNumbers.versionName
+        artifactId = 'lives'
+        artifact("$buildDir/outputs/aar/$archivesBaseName-release.aar")
+    }
+}
+
+artifactory {
+    contextUrl = artifactoryUrl
+    publish {
+        repository {
+            Properties properties = new Properties()
+            properties.load(project.rootProject.file('local.properties').newDataInputStream())
+            repoKey = 'lives/'
+            username = properties.getProperty('bintray.user')
+            password = properties.getProperty('bintray.apiKey')
+        }
+
+        defaults {
+            publishArtifacts = true
+            publications('aar')
+        }
+    }
+}

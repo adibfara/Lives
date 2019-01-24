@@ -7,12 +7,12 @@ buildscript {
         jcenter()
         maven { url "https://dl.bintray.com/adibfara/lives" }
     }
-    ext.kotlin_version = '1.2.31'
+    apply from: rootProject.file('versions.gradle')
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.android.tools.build:gradle:3.1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versionNumbers.kotlin}"
+        classpath "com.android.tools.build:gradle:${versionNumbers.gradle}"
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:${versionNumbers.jfrog}"
+
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -26,6 +26,8 @@ allprojects {
         maven { url "https://dl.bintray.com/adibfara/lives" }
     }
 }
+
+subprojects { project -> apply from: rootProject.file('versions.gradle') }
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

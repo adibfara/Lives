@@ -32,10 +32,10 @@ fun <T,O> LiveData<T>.switchMap(function : MapperFunction<T,LiveData<O>>):LiveDa
  */
 fun <T> LiveData<T>.doBeforeNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
-    mutableLiveData.addSource(this, {
+    mutableLiveData.addSource(this) {
         onNext.performAction(it)
         mutableLiveData.value = it
-    })
+    }
     return mutableLiveData
 }
 
@@ -44,10 +44,10 @@ fun <T> LiveData<T>.doBeforeNext(onNext : OnNextAction<T>):MutableLiveData<T>{
  */
 fun <T> LiveData<T>.doAfterNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
-    mutableLiveData.addSource(this, {
+    mutableLiveData.addSource(this) {
         mutableLiveData.value = it
         onNext.performAction(it)
-    })
+    }
     return mutableLiveData
 }
 
@@ -57,17 +57,16 @@ fun <T> LiveData<T>.doAfterNext(onNext : OnNextAction<T>):MutableLiveData<T>{
 fun <T> LiveData<T>.buffer(count:Int): MutableLiveData<List<T?>> {
     val mutableLiveData: MediatorLiveData<List<T?>> = MediatorLiveData()
     val latestBuffer = mutableListOf<T?>()
-    mutableLiveData.addSource(this, {
-        value->
-        synchronized(latestBuffer,{
+    mutableLiveData.addSource(this) { value ->
+        synchronized(latestBuffer) {
             latestBuffer.add(value)
             if (latestBuffer.size == count){
                 mutableLiveData.value = latestBuffer.toList()
                 latestBuffer.clear()
             }
-        })
+        }
 
-    })
+    }
     return mutableLiveData
 }
 
@@ -83,12 +82,12 @@ fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): Mu
     }
     inputLiveData.forEachIndexed {
         index, liveData ->
-        mutableLiveData.addSource(liveData, {
+        mutableLiveData.addSource(liveData) {
             value ->
             if(considerNulls || value != null){
-                synchronized(activeLiveDataIndex,{
-                        activeLiveDataIndex = index
-                })
+                synchronized(activeLiveDataIndex) {
+                    activeLiveDataIndex = index
+                }
                 inputLiveData.forEachIndexed { index, liveData ->
                     if(index != activeLiveDataIndex){
                         mutableLiveData.removeSource(liveData)
@@ -101,8 +100,7 @@ fun <T> amb(vararg inputLiveData: LiveData<T>, considerNulls:Boolean = true): Mu
             }
 
 
-
-        })
+        }
     }
     return mutableLiveData
 }
