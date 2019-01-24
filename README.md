@@ -129,6 +129,11 @@ Please note that because of design of `LiveData`, after a value is emitted to an
 
 So If you want to use operators like `concat`, you have to consider allowing only one observer to the LiveData.
 
+PRs are more than welcome, and please file an issue If you encounter something 🍻.
+
+You can also ping me on twitter [@TheSNAKY](http://twitter.com/TheSNAKY).
+
+
 License
 =======
 
