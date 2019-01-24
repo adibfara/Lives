@@ -72,6 +72,8 @@ fun <T> LiveData<T>.take(count:Int): LiveData<T> {
         if(takenCount<count) {
             mutableLiveData.value = it
             takenCount++
+        } else {
+            mutableLiveData.removeSource(this)
         }
     }
     return mutableLiveData
@@ -87,6 +89,8 @@ inline fun <T> LiveData<T>.takeUntil(crossinline predicate : (T?)->Boolean): Liv
         if(predicate(it)) metPredicate = true
         if(!metPredicate) {
             mutableLiveData.value = it
+        } else {
+            mutableLiveData.removeSource(this)
         }
     }
     return mutableLiveData

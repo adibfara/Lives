@@ -12,6 +12,7 @@ import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Maps any values that were emitted by the LiveData to the given function
@@ -68,6 +69,48 @@ fun <T> LiveData<T>.buffer(count:Int): MutableLiveData<List<T?>> {
 
     }
     return mutableLiveData
+}
+
+/**
+ * Returns a LiveData that applies a specified accumulator function to each item that is emitted
+ * after the first item has been emitted.
+ * Note: The LiveData should not emit nulls. Add .nonNull() to your LiveData if you want to ensure this.
+ *
+ * @param accumulator the function that is applied to each item
+ */
+fun <T> LiveData<T>.scan(accumulator: (accumulatedValue: T, currentValue: T) -> T): MutableLiveData<T> {
+    var accumulatedValue: T? = null
+    val hasEmittedFirst = AtomicBoolean(false)
+    return MediatorLiveData<T>().apply {
+        addSource(this@scan) { emittedValue ->
+            if (hasEmittedFirst.compareAndSet(false, true)) {
+                accumulatedValue = emittedValue
+            } else {
+                accumulatedValue = accumulator(accumulatedValue!!, emittedValue!!)
+                value = accumulatedValue
+            }
+        }
+    }
+}
+
+/**
+ * Returns a LiveData that applies a specified accumulator function to the first item emitted by a source LiveData,
+ * then feeds the result of that function along with the second item emitted by the source LiveData into the same function,
+ * and so on, emitting the result of each of these iterations.
+ * Note: Your LiveData should not emit nulls. Add .nonNull() to your LiveData if you want to ensure this.
+ *
+ * @param initialSeed the initial value of the accumulator
+ * @param accumulator the function that is applied to each item
+ */
+fun <T, R> LiveData<T>.scan(initialSeed: R, accumulator: (accumulated: R, currentValue: T) -> R): MutableLiveData<R> {
+    var accumulatedValue = initialSeed
+    return MediatorLiveData<R>().apply {
+        value = initialSeed
+        addSource(this@scan) { emittedValue ->
+            accumulatedValue = accumulator(accumulatedValue, emittedValue!!)
+            value = accumulatedValue
+        }
+    }
 }
 
 /**

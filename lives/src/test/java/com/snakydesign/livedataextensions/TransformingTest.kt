@@ -10,6 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
 import org.mockito.Mockito.*
+import kotlin.test.assertNull
 
 /**
  * Created by Adib Faramarzi (adibfara@gmail.com)
@@ -193,6 +194,65 @@ class TransformingTest {
         assertEquals(20,testingLiveData.value)
         verify(observer).onChanged(20)
         verify(observer).onChanged(20)
+
+        verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun `test LiveData scan with without initial seed, does not emit first item`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Int>
+        val sourceLiveData = MutableLiveData<Int>()
+        val testingLiveData = sourceLiveData.scan { acc, value ->
+            value?.let { acc?.plus(it) }
+        }
+        testingLiveData.observeForever(observer)
+        assertNull(testingLiveData.value)
+        verifyZeroInteractions(observer)
+    }
+
+    @Test
+    fun `test LiveData scan without initial seed`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Int>
+        val sourceLiveData = MutableLiveData<Int>()
+        val testingLiveData = sourceLiveData.scan { acc, value ->
+            value?.let { acc?.plus(it) }
+        }
+        testingLiveData.observeForever(observer)
+        assertNull(testingLiveData.value)
+
+        sourceLiveData.value = 1
+        assertEquals(null, testingLiveData.value)
+
+        sourceLiveData.value = 2
+        assertEquals(3, testingLiveData.value)
+        verify(observer).onChanged(3)
+
+        sourceLiveData.value = 5
+        assertEquals(8, testingLiveData.value)
+        verify(observer).onChanged(8)
+
+        verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun `test LiveData scan with initial seed`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<String>
+        val sourceLiveData = MutableLiveData<Int>()
+        val testingLiveData = sourceLiveData.scan("W") { acc: String, value: Int ->
+            acc + "X$value"
+        }
+        testingLiveData.observeForever(observer)
+
+        assertEquals("W", testingLiveData.value)
+        verify(observer).onChanged("W")
+
+        sourceLiveData.value = 1
+        assertEquals("WX1", testingLiveData.value)
+        verify(observer).onChanged("WX1")
+
+        sourceLiveData.value = 2
+        assertEquals("WX1X2", testingLiveData.value)
+        verify(observer).onChanged("WX1X2")
 
         verifyNoMoreInteractions(observer)
     }

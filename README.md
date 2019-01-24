@@ -9,8 +9,8 @@ Download
 Add the dependencies to your project:
 
 ```groovy
-implementation 'android.arch.lifecycle:extensions:1.1.1'
-implementation 'com.snakydesign.livedataextensions:lives:1.0.1'
+implementation 'android.arch.lifecycle:extensions:x.x.x'
+implementation 'com.snakydesign.livedataextensions:lives:1.2.0'
 ```
 
 Usage

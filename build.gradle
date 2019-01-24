@@ -9,13 +9,11 @@ buildscript {
     }
     apply from: rootProject.file('versions.gradle')
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versionNumbers.kotlin}"
-        classpath "com.android.tools.build:gradle:${versionNumbers.gradle}"
-        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:${versionNumbers.jfrog}"
-
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath libraries.kotlinGradle
+        classpath libraries.gradle
+        classpath libraries.jfrog
+        classpath libraries.bintray
+        classpath libraries.androidMaven
     }
 }
 allprojects {
