@@ -38,7 +38,7 @@ Usage
     val liveData = liveDataOf {computePI()}
 ```
 
-- `empty` : Creates an empty LiveData.
+- `emptyLiveData` : Creates an empty LiveData
 ```kotlin
     val liveData = emptyLiveData<Int>()
 ```

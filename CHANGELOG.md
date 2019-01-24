@@ -1,7 +1,8 @@
 ## [1.2.1]
 ### Changed
-- change the name of `just` to `liveDataOf`, since just was too broad.
-- change the name of `empty()` to `emptyLiveData()`, since empty was too broad.
+- [_BREAKING_] change the name of `just(value)` to `liveDataOf(value)`, since just was too broad.
+- [_BREAKING_] change the name of `from { }` to `liveDataOf { }`, since just was too broad.
+- [_BREAKING_] change the name of `empty()` to `emptyLiveData()`, since empty was too broad.
 
 ## [1.2.0]
 ### Added
