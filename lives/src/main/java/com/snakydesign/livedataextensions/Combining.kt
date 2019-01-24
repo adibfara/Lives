@@ -291,7 +291,7 @@ fun <T> LiveData<T>.sampleWith(other: LiveData<*>): LiveData<T> {
         hasValueToConsume.set(true)
         latestValue = it
     }
-    finalLiveData.addSource(other) { value ->
+    finalLiveData.addSource(other) {
         if (hasValueToConsume.compareAndSet(true, false)) {
             finalLiveData.value = latestValue
         }

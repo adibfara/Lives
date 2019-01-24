@@ -18,12 +18,12 @@ class SingleLiveDataConcat<T>(liveDataList:List<SingleLiveData<T>>): MediatorLiv
             index->
             emittedValues.add(null)
             hasEmittedValues.add(false)
-            addSource(liveDataList[index] , {
+            addSource(liveDataList[index]) {
                 emittedValues[index] = it
                 hasEmittedValues[index] = true
                 removeSource(this)
                 checkEmit()
-            })
+            }
         }
     }
 

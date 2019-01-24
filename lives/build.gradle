@@ -1,10 +1,10 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 2
         versionName "1.2.0"
 
@@ -43,14 +43,14 @@ afterEvaluate {
 }
 
 dependencies {
-    api fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation  'junit:junit:4.12'
-    api "org.jetbrains.kotlin:kotlin-stdlib:${versionNumbers.kotlin}"
-
-    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:${versionNumbers.kotlin}"
-    api 'android.arch.lifecycle:extensions:1.1.1'
-    testImplementation 'org.mockito:mockito-core:2.8.9'
-    testImplementation("android.arch.core:core-testing:1.1.1", {
+    implementation libraries.kotlinSTDLib
+    testImplementation libraries.kotlinTestJunit
+    implementation libraries.archLifeCycle
+    implementation libraries.archLiveData
+    testImplementation libraries.mockito
+    testImplementation("android.arch.core:core-testing:${versionNumbers.arch}", {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'
