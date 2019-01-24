@@ -64,7 +64,7 @@ fun <T, Y> zip(first: LiveData<T>, second: LiveData<Y>): LiveData<Pair<T, Y>> {
     return zip(first, second) { t, y -> Pair(t, y) }
 }
 
-fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, mapper: (T, Y) -> Z): LiveData<Z> {
+fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, zipFunction: (T, Y) -> Z): LiveData<Z> {
     val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
@@ -77,7 +77,7 @@ fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, mapper: (T, Y) -> Z):
         firstValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!)
+                finalLiveData.value = zipFunction(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
             }
@@ -88,7 +88,7 @@ fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, mapper: (T, Y) -> Z):
         secondValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!)
+                finalLiveData.value = zipFunction(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
             }
@@ -105,7 +105,7 @@ fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, mapper: (T, Y) -> Z):
  * The difference between combineLatest and zip is that the zip only emits after all LiveData
  * objects have a new value, but combineLatest will emit after any of them has a new value.
  */
-fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>, mapper: (T, Y, X) -> Z): LiveData<Z> {
+fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>, zipFunction: (T, Y, X) -> Z): LiveData<Z> {
     val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
@@ -120,7 +120,7 @@ fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>
         firstEmitted = true
         firstValue = value
         if (firstEmitted && secondEmitted && thirdEmitted) {
-            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+            finalLiveData.value = zipFunction(firstValue!!, secondValue!!, thirdValue!!)
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
@@ -134,7 +134,7 @@ fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
-            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+            finalLiveData.value = zipFunction(firstValue!!, secondValue!!, thirdValue!!)
         }
     }
 
@@ -145,7 +145,7 @@ fun <T, Y, X, Z> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>
             firstEmitted = false
             secondEmitted = false
             thirdEmitted = false
-            finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+            finalLiveData.value = zipFunction(firstValue!!, secondValue!!, thirdValue!!)
         }
     }
 
@@ -164,7 +164,7 @@ fun <T, Y, X> zip(first: LiveData<T>, second: LiveData<Y>, third: LiveData<X>): 
  * The difference between combineLatest and zip is that the zip only emits after all LiveData
  * objects have a new value, but combineLatest will emit after any of them has a new value.
  */
-fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, mapper: (X, T) -> Z): LiveData<Z> {
+fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, combineFunction: (X, T) -> Z): LiveData<Z> {
     val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
@@ -177,7 +177,7 @@ fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, mapper: (X,
         firstValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!)
+                finalLiveData.value = combineFunction(firstValue!!, secondValue!!)
             }
         }
     }
@@ -186,7 +186,7 @@ fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, mapper: (X,
         secondValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!)
+                finalLiveData.value = combineFunction(firstValue!!, secondValue!!)
             }
         }
     }
@@ -200,7 +200,7 @@ fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, mapper: (X,
  * The difference between combineLatest and zip is that the zip only emits after all LiveData
  * objects have a new value, but combineLatest will emit after any of them has a new value.
  */
-fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: LiveData<T>, mapper: (X, Y, T) -> Z): LiveData<Z> {
+fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: LiveData<T>, combineFunction: (X, Y, T) -> Z): LiveData<Z> {
     val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
 
     var firstEmitted = false
@@ -216,7 +216,7 @@ fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: L
         firstValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+                finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
         }
     }
@@ -225,7 +225,7 @@ fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: L
         secondValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+                finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
         }
     }
@@ -234,7 +234,7 @@ fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: L
         thirdValue = value
         synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
-                finalLiveData.value = mapper(firstValue!!, secondValue!!, thirdValue!!)
+                finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
         }
     }

@@ -86,7 +86,8 @@ Usage
 - `LiveData.then(LiveData)` : Concats the first LiveData with the given one. (Please check the note below.)
 - `LiveData.merge(LiveData)` : Merges this LiveData with another one, and emits any item that was emitted by any of them
 - `startWith(startingValue)`: Emits the `startingValue` before any other value.
-- `zip(firstLiveData, secondLiveData)`: zips both of the LiveData and emits a value after both of them have emitted their values, after that, emits values whenever any of them emits a value.
+- `zip(firstLiveData, secondLiveData, zipFunction)`: zips both of the LiveDatas using the zipFunction and emits a value after both of them have emitted their values, after that, emits values whenever any of them emits a value.
+- `combineLatest(firstLiveData, secondLiveData, combineFunction)`: combines both of the LiveDatas using the combineFunction and emits a value after any of them have emitted a value.
 
 **Transforming**
 
@@ -95,6 +96,8 @@ Usage
 - `doBeforeNext(OnNextAction)` : Does the `onNext` function before everything actually emitting the item to the observers
 - `doAfterNext(OnNextAction)` : Does the `onNext` function after emitting the item to the observers(function) : Does the `onNext` function before everything actually emitting the item to the observers
 - `buffer(count)` : Buffers the items emitted by the LiveData, and emits them when they reach the `count` as a List.
+- `scan(accumulator)` : Applies the accumulator function to each emitted item, starting with the second emitted item. Initial value of the accumulator is the first item.
+- `scan(seed, accumulator)` : Applies the accumulator function to each emitted item, starting with the initial seed.
 - `amb(LiveData...)` : Emits the items of the first LiveData that emits the item. Items of other LiveDatas will never be emitted and are not considered.
 - `toMutableLiveData()` : Converts a LiveData to a MutableLiveData with the initial value set by this LiveData's value
 
