@@ -59,10 +59,9 @@ if (project.rootProject.file('local.properties').exists()) {
             }
         }
 
+        publications= ['mavenAar']
     }
 
-    if (project.getPlugins().hasPlugin('com.android.application') ||
-            project.getPlugins().hasPlugin('com.android.library')) {
         install {
             repositories.mavenInstaller {
                 customizePom(pom, project)
@@ -87,53 +86,7 @@ if (project.rootProject.file('local.properties').exists()) {
             classifier = 'sources'
             from android.sourceSets.main.java.source
         }
-    } else {
-        install {
-            repositories.mavenInstaller {
-                customizePom(pom, project)
-                pom.groupId = GROUP
-                pom.artifactId = POM_ARTIFACT_ID
-                pom.version = VERSION_NAME
-                pom.project {
-                    name POM_NAME
-                    packaging POM_PACKAGING
-                    description POM_DESCRIPTION
-                    url POM_URL
 
-                    scm {
-                        url POM_SCM_URL
-                        connection POM_SCM_CONNECTION
-                        developerConnection POM_SCM_DEV_CONNECTION
-                    }
-
-                    licenses {
-                        license {
-                            name POM_LICENCE_NAME
-                            url POM_LICENCE_URL
-                            distribution POM_LICENCE_DIST
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id POM_DEVELOPER_ID
-                            name POM_DEVELOPER_NAME
-                        }
-                    }
-                }
-            }
-        }
-
-        task sourcesJar(type: Jar, dependsOn: classes) {
-            classifier = 'sources'
-            from sourceSets.main.allSource
-        }
-
-        task javadocJar(type: Jar, dependsOn: javadoc) {
-            classifier = 'javadoc'
-            from javadoc.destinationDir
-        }
-    }
 
     if (JavaVersion.current().isJava8Compatible()) {
         allprojects {
@@ -147,10 +100,6 @@ if (project.rootProject.file('local.properties').exists()) {
         if (project.getPlugins().hasPlugin('com.android.application') ||
                 project.getPlugins().hasPlugin('com.android.library')) {
             archives androidSourcesJar
-            ///archives androidJavadocsJar
-        } else {
-            archives sourcesJar
-            archives javadocJar
         }
     }
 
@@ -257,5 +206,17 @@ def customizePom(pom, gradleProject) {
                 }
             }
         }
+
+
     }
+}
+
+
+task copyPom(type: Copy) {
+    from rootProject.file("/lives/build/publications/mavenAar/pom-default.xml")
+    into rootProject.file("/lives/build/poms/")
+}
+
+task  releaseOnAdibBintray(type: GradleBuild) {
+    tasks = ['assembleRelease', 'androidSourcesJar', 'generatePomFileForMavenAarPublication', 'copyPom', 'bintrayUpload']
 }
