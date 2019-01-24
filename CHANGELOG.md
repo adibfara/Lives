@@ -1,3 +1,8 @@
+## [1.2.1]
+### Changed
+- change the name of `just` to `liveDataOf`, since just was too broad.
+- change the name of `empty()` to `emptyLiveData()`, since empty was too broad.
+
 ## [1.2.0]
 ### Added
 - `LiveData.sampleWith(otherLiveData)`: Samples the current live data with other live data, resulting in a live data that emits the last value emitted by the original live data (if any) whenever the other live data emits

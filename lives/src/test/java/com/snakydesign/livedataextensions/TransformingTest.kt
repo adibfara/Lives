@@ -34,7 +34,7 @@ class TransformingTest {
     @Test
     fun `test LiveData filter initial item`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = just(2).filter {
+        val testingLiveData = liveDataOf(2).filter {
             it!=null && it > 1
         }
         testingLiveData.observeForever(observer)
@@ -47,7 +47,7 @@ class TransformingTest {
     @Test
     fun `test LiveData filter multiple items`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val originalLiveData = just(2)
+        val originalLiveData = liveDataOf(2)
         val testingLiveData = originalLiveData.filter {
             it!=null && it > 10
         }
@@ -66,7 +66,7 @@ class TransformingTest {
     @Test
     fun `test LiveData map`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = just(2).map { 3 }
+        val testingLiveData = liveDataOf(2).map { 3 }
         testingLiveData.observeForever(observer)
 
         assertEquals(3,testingLiveData.value)
@@ -77,7 +77,7 @@ class TransformingTest {
     @Test
     fun `test LiveData switchMap`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = just(2).switchMap { just(4) }
+        val testingLiveData = liveDataOf(2).switchMap { liveDataOf(4) }
         testingLiveData.observeForever(observer)
 
         assertEquals(4,testingLiveData.value)
@@ -88,7 +88,7 @@ class TransformingTest {
     @Test
     fun `test LiveData doBeforeNext`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val mockedBeforeNext = mock(OnNextAction::class.java) as OnNextAction<Int>
+        val mockedBeforeNext = mock(TestOnNextAction::class.java) as OnNextAction<Int>
         val sourceLiveData = MutableLiveData<Int>()
         val testingLiveData = sourceLiveData.doBeforeNext(mockedBeforeNext)
         val expectedValue = 3
@@ -96,7 +96,7 @@ class TransformingTest {
 
         sourceLiveData.value = expectedValue
         val inOrder = inOrder(mockedBeforeNext,observer)
-        inOrder.verify(mockedBeforeNext, times(1)).performAction(expectedValue)
+        inOrder.verify(mockedBeforeNext, times(1))(expectedValue)
         assertEquals(expectedValue,testingLiveData.value)
         inOrder.verify(observer).onChanged(expectedValue)
         inOrder.verifyNoMoreInteractions()
@@ -105,7 +105,7 @@ class TransformingTest {
     @Test
     fun `test LiveData doAterNext`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val mockedBeforeNext = mock(OnNextAction::class.java) as OnNextAction<Int>
+        val mockedBeforeNext = spy(TestOnNextAction::class.java) as OnNextAction<Int>
         val sourceLiveData = MutableLiveData<Int>()
         val testingLiveData = sourceLiveData.doAfterNext(mockedBeforeNext)
         val expectedValue = 3
@@ -114,7 +114,7 @@ class TransformingTest {
         sourceLiveData.value = expectedValue
         val inOrder = inOrder(mockedBeforeNext,observer)
         inOrder.verify(observer).onChanged(expectedValue)
-        inOrder.verify(mockedBeforeNext, times(1)).performAction(expectedValue)
+        inOrder.verify(mockedBeforeNext, times(1))(expectedValue)
         assertEquals(expectedValue,testingLiveData.value)
         inOrder.verifyNoMoreInteractions()
     }

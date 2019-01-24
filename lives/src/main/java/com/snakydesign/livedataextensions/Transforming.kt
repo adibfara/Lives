@@ -34,7 +34,7 @@ fun <T,O> LiveData<T>.switchMap(function : MapperFunction<T,LiveData<O>>):LiveDa
 fun <T> LiveData<T>.doBeforeNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this) {
-        onNext.performAction(it)
+        onNext(it)
         mutableLiveData.value = it
     }
     return mutableLiveData
@@ -47,7 +47,7 @@ fun <T> LiveData<T>.doAfterNext(onNext : OnNextAction<T>):MutableLiveData<T>{
     val mutableLiveData:MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this) {
         mutableLiveData.value = it
-        onNext.performAction(it)
+        onNext(it)
     }
     return mutableLiveData
 }
@@ -166,3 +166,8 @@ fun <T> LiveData<T>.toMutableLiveData():MutableLiveData<T>{
  * Mapper function used in the operators that need mapping
  */
 typealias MapperFunction<T,O> = (T)->O
+
+/**
+ * Mapper function used in the operators that need mapping
+ */
+typealias OnNextAction<T> = (T?) -> Unit

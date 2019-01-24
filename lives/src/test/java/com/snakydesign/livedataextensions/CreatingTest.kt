@@ -29,7 +29,7 @@ class CreatingTest {
 
     @Test
     fun `test LiveData creation from value`(){
-        val testingLiveData = just(2)
+        val testingLiveData = liveDataOf(2)
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
         assertEquals(2,testingLiveData.value)
 
@@ -40,7 +40,7 @@ class CreatingTest {
 
     @Test
     fun `test LiveData creation from function`(){
-        val testingLiveData = from { 2 }
+        val testingLiveData = liveDataOf { 2 }
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
         assertEquals(2,testingLiveData.value)
 
@@ -51,7 +51,7 @@ class CreatingTest {
 
     @Test
     fun `test LiveData creation from empty`(){
-        val testingLiveData = empty<Int>()
+        val testingLiveData = emptyLiveData<Int>()
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
         testingLiveData.observeForever(observer)
         Mockito.verifyZeroInteractions(observer)

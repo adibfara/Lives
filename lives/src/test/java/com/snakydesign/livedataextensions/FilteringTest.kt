@@ -30,7 +30,7 @@ class FilteringTest {
     @Test
     fun `test LiveData filter`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = just(2).filter {
+        val testingLiveData = liveDataOf(2).filter {
             it!=null && it > 1
         }
         testingLiveData.observeForever(observer)

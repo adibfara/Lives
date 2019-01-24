@@ -28,19 +28,19 @@ Usage
 ```
 **Creating LiveData**
 
-- `just` : Create a LiveData object from a value
+- `liveDataOf` : Create a LiveData object from a value (like `just` in RxJava, although it immediately emits the value)
 ```kotlin
-    val liveData = just(2) //liveData will produce 2 (as Int) when observed
+    val liveData = liveDataOf(2) //liveData will produce 2 (as Int) when observed
 ```
 
-- `from` : Creates a LiveData that emits the value that the `callable` function produces, immediately.
+- `from` : Creates a LiveData that emits the value that the `callable` function produces, and immediately emits it.
 ```kotlin
-    val liveData = from {computePI()}
+    val liveData = liveDataOf {computePI()}
 ```
 
 - `empty` : Creates an empty LiveData.
 ```kotlin
-    val liveData = empty()
+    val liveData = emptyLiveData<Int>()
 ```
 
 
