@@ -88,6 +88,7 @@ Usage
 - `startWith(startingValue)`: Emits the `startingValue` before any other value.
 - `zip(firstLiveData, secondLiveData, zipFunction)`: zips both of the LiveDatas using the zipFunction and emits a value after both of them have emitted their values, after that, emits values whenever any of them emits a value.
 - `combineLatest(firstLiveData, secondLiveData, combineFunction)`: combines both of the LiveDatas using the combineFunction and emits a value after any of them have emitted a value.
+- `LiveData.sampleWith(otherLiveData)`: Samples the current live data with other live data, resulting in a live data that emits the last value emitted by the original live data (if any) whenever the other live data emits
 
 **Transforming**
 

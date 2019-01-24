@@ -156,6 +156,28 @@ class CombiningTest {
     }
 
     @Test
+    fun `test LiveData sample with another LiveData`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Triple<Boolean, Int, String>>
+        val sourceLiveData1 = MutableLiveData<Boolean>()
+        val sourceLiveData2 = MutableLiveData<Int>()
+        val sourceLiveData3 = MutableLiveData<String>()
+        val expectedResult = Triple(true, 3, "hello")
+        val testingLiveData = zip(sourceLiveData1, sourceLiveData2, sourceLiveData3) { b, i, s -> Triple(b, i, s) }
+        testingLiveData.observeForever(observer)
+
+
+        sourceLiveData1.value = true
+        Assert.assertEquals(null, testingLiveData.value)
+        sourceLiveData2.value = 3
+        Assert.assertEquals(null, testingLiveData.value)
+        sourceLiveData3.value = "hello"
+        Assert.assertEquals(expectedResult, testingLiveData.value)
+        verify(observer).onChanged(expectedResult)
+
+        verifyNoMoreInteractions(observer)
+    }
+
+    @Test
     fun `test LiveData combineLatest with another LiveData`() {
         val observer = Mockito.mock(Observer::class.java) as Observer<Pair<Boolean, Int>>
         val sourceLiveData1 = MutableLiveData<Boolean>()
@@ -188,39 +210,51 @@ class CombiningTest {
     }
 
     @Test
-    fun `test LiveData combineLatest with two other LiveData`() {
-        val observer = Mockito.mock(Observer::class.java) as Observer<Triple<Boolean, Int, String>>
-        val sourceLiveData1 = MutableLiveData<Boolean>()
-        val sourceLiveData2 = MutableLiveData<Int>()
-        val sourceLiveData3 = MutableLiveData<String>()
-        val expectedResult = Triple(true, 3, "test1")
-        val expectedResult2 = Triple(true, 4, "test1")
-        val expectedResult3 = Triple(true, 4, "test2")
-        val expectedResult4 = Triple(false, 4, "test2")
-        val testingLiveData = combineLatest(sourceLiveData1, sourceLiveData2, sourceLiveData3) { boolean, int, str -> Triple(boolean, int, str) }
+    fun `test LiveData sampleWith another live data`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Int>
+        val sourceLiveData = MutableLiveData<Int>()
+        val samplerLiveData = MutableLiveData<Boolean>()
+        val testingLiveData = sourceLiveData.sampleWith(samplerLiveData)
         testingLiveData.observeForever(observer)
 
 
-        sourceLiveData1.value = true
-        Assert.assertEquals(null, testingLiveData.value)
-        sourceLiveData2.value = 3
-        Assert.assertEquals(null, testingLiveData.value)
-        sourceLiveData3.value = "test1"
+        sourceLiveData.value = 1
+        Assert.assertNull(testingLiveData.value)
 
-        Assert.assertEquals(expectedResult, testingLiveData.value)
-        verify(observer).onChanged(expectedResult)
+        sourceLiveData.value = 2
+        Assert.assertNull(testingLiveData.value)
+        samplerLiveData.value = true
+        Assert.assertEquals(2, testingLiveData.value)
+        verify(observer).onChanged(2)
 
-        sourceLiveData2.value = 4
-        Assert.assertEquals(expectedResult2, testingLiveData.value)
-        verify(observer).onChanged(expectedResult2)
+        sourceLiveData.value = 3
+        Assert.assertEquals(2, testingLiveData.value)
+        samplerLiveData.value = true
+        Assert.assertEquals(3, testingLiveData.value)
+        verify(observer).onChanged(3)
 
-        sourceLiveData3.value = "test2"
-        Assert.assertEquals(expectedResult3, testingLiveData.value)
-        verify(observer).onChanged(expectedResult3)
+        samplerLiveData.value = true
+        sourceLiveData.value = 5
 
-        sourceLiveData1.value = false
-        Assert.assertEquals(expectedResult4, testingLiveData.value)
-        verify(observer).onChanged(expectedResult4)
+        verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun `test LiveData sampleWith another live data to not emit when there are no new values`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Int>
+        val sourceLiveData = MutableLiveData<Int>()
+        val samplerLiveData = MutableLiveData<Boolean>()
+        val testingLiveData = sourceLiveData.sampleWith(samplerLiveData)
+        testingLiveData.observeForever(observer)
+
+        samplerLiveData.value = true
+        samplerLiveData.value = true
+        samplerLiveData.value = true
+        Assert.assertNull(testingLiveData.value)
+        sourceLiveData.value = 5
+        samplerLiveData.value = true
+        Assert.assertEquals(5, testingLiveData.value)
+        verify(observer).onChanged(5)
 
         verifyNoMoreInteractions(observer)
     }

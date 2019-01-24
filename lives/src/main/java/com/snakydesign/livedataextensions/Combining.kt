@@ -11,6 +11,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 import com.snakydesign.livedataextensions.operators.SingleLiveDataConcat
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Merges this LiveData with another one, and emits any item that was emitted by any of them
@@ -272,4 +273,28 @@ fun <T> concat(vararg liveData:LiveData<T>):LiveData<T>{
             liveDataList.add(it.toSingleLiveData())
     }
     return SingleLiveDataConcat(liveDataList)
+}
+
+/**
+ * Combines the latest values from two LiveData objects.
+ * First emits after both LiveData objects have emitted a value, and will emit afterwards after any
+ * of them emits a new value.
+ *
+ * The difference between combineLatest and zip is that the zip only emits after all LiveData
+ * objects have a new value, but combineLatest will emit after any of them has a new value.
+ */
+fun <T> LiveData<T>.sampleWith(other: LiveData<*>): LiveData<T> {
+    val finalLiveData: MediatorLiveData<T> = MediatorLiveData()
+    val hasValueToConsume = AtomicBoolean(false)
+    var latestValue: T? = null
+    finalLiveData.addSource(this) {
+        hasValueToConsume.set(true)
+        latestValue = it
+    }
+    finalLiveData.addSource(other) { value ->
+        if (hasValueToConsume.compareAndSet(true, false)) {
+            finalLiveData.value = latestValue
+        }
+    }
+    return finalLiveData
 }
