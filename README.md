@@ -10,7 +10,7 @@ Add the dependencies to your project:
 
 ```groovy
 implementation 'android.arch.lifecycle:extensions:x.x.x'
-implementation 'com.snakydesign.livedataextensions:lives:1.2.0'
+implementation 'com.snakydesign.livedataextensions:lives:1.2.1'
 ```
 
 If you want to use this library on a Java project, add the following dependency:

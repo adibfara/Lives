@@ -12,7 +12,7 @@ ext.versionNumbers = [
     minSdk      : 16,
     targetSdk   : 28,
     versionCode : 3,
-    versionName : '1.2',
+    versionName : '1.2.1',
 ]
 
 ext.libraries = [
