@@ -7,3 +7,8 @@
 
 ### Changed
 - change `api` to `implementation` when importing the architecture components libraries to make them compile-only
+
+## [1.0.1]
+### Added
+- Add support for android v15.
+- Add the operator empty<T>() to easily create MutableLiveData objects.
