@@ -59,7 +59,7 @@ Usage
 - `distinctUntilChanged` : Emits the items that are different from the last item
 ```kotlin
     val originalLiveData = MutableLiveData<Int>()
-    val newLiveData = originalLiveData.distinct()
+    val newLiveData = originalLiveData.distinctUntilChanged()
     originalLiveData.value = 2
     originalLiveData.value = 2 // newLiveData will not produce this
     originalLiveData.value = 3 // newLiveData will produce
