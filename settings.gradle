@@ -1,1 +1,1 @@
-include ':lives', ':testapplication'
+include ':lives', ':testapplicaiton'

@@ -16,17 +16,17 @@ ext.versionNumbers = [
 ]
 
 ext.libraries = [
-    gradle          : "com.android.tools.build:gradle:$versionNumbers.gradle",
-    kotlinGradle    : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionNumbers.kotlin",
-    jfrog           : "org.jfrog.buildinfo:build-info-extractor-gradle:$versionNumbers.jfrog",
-    bintray         : "com.jfrog.bintray.gradle:gradle-bintray-plugin:$versionNumbers.bintray",
-    androidMaven    : "com.github.dcendents:android-maven-gradle-plugin:$versionNumbers.androidMaven",
+    gradle         : "com.android.tools.build:gradle:$versionNumbers.gradle",
+    kotlinGradle   : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versionNumbers.kotlin",
+    jfrog          : "org.jfrog.buildinfo:build-info-extractor-gradle:$versionNumbers.jfrog",
+    bintray        : "com.jfrog.bintray.gradle:gradle-bintray-plugin:$versionNumbers.bintray",
+    androidMaven   : "com.github.dcendents:android-maven-gradle-plugin:$versionNumbers.androidMaven",
 
-    kotlinSTDLib    : "org.jetbrains.kotlin:kotlin-stdlib:$versionNumbers.kotlin",
-    kotlinTestJunit : "org.jetbrains.kotlin:kotlin-test-junit:$versionNumbers.kotlin",
-    mockito         : "org.mockito:mockito-core:$versionNumbers.mockito",
-    archLifeCycle   : "android.arch.lifecycle:extensions:$versionNumbers.arch",
-    archLiveData: "android.arch.lifecycle:livedata:$versionNumbers.arch",
-    archCoreTesting : "android.arch.core:core-testing:$versionNumbers.arch",
-    junit           : "junit:junit:$versionNumbers.junit",
+    kotlinSTDLib   : "org.jetbrains.kotlin:kotlin-stdlib:$versionNumbers.kotlin",
+    kotlinTestJunit: "org.jetbrains.kotlin:kotlin-test-junit:$versionNumbers.kotlin",
+    mockito        : "org.mockito:mockito-core:$versionNumbers.mockito",
+    archLifeCycle  : "android.arch.lifecycle:extensions:$versionNumbers.arch",
+    archLiveData   : "android.arch.lifecycle:livedata:$versionNumbers.arch",
+    archCoreTesting: "android.arch.core:core-testing:$versionNumbers.arch",
+    junit          : "junit:junit:$versionNumbers.junit",
 ]

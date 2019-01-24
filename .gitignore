@@ -8,5 +8,5 @@
 /build
 /captures
 .externalNativeBuild
-/testapplication/
+.testapplication
 .idea

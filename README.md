@@ -13,6 +13,11 @@ implementation 'android.arch.lifecycle:extensions:x.x.x'
 implementation 'com.snakydesign.livedataextensions:lives:1.2.0'
 ```
 
+If you want to use this library on a Java project, add the following dependency:
+```groovy
+implementation 'org.jetbrains.kotlin:kotlin-stdlib:x.x.x'
+```
+
 Usage
 --------
 
