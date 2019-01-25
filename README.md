@@ -1,6 +1,6 @@
 Lives - Android LiveData Extensions for Kotlin and Java
 -------------------------------------------------------
-[![Build Status](https://travis-ci.org/adibfara/Lives.svg?branch=master)](https://travis-ci.org/adibfara/Lives)[![Latest Version](https://img.shields.io/bintray/v/adibfara/lives/lives.svg?label=version)](https://github.com/adibfara/Lives)
+[![Build Status](https://travis-ci.org/adibfara/Lives.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/lives/lives.svg?label=version)](https://github.com/adibfara/Lives)
 
 Add RxJava-like operators to your LiveData objects with ease, usable in Kotlin (as extension functions) and Java (as static functions to a class called Lives)
 
