@@ -276,12 +276,9 @@ fun <T> concat(vararg liveData:LiveData<T>):LiveData<T>{
 }
 
 /**
- * Combines the latest values from two LiveData objects.
- * First emits after both LiveData objects have emitted a value, and will emit afterwards after any
- * of them emits a new value.
- *
- * The difference between combineLatest and zip is that the zip only emits after all LiveData
- * objects have a new value, but combineLatest will emit after any of them has a new value.
+ * Samples the current live data with other live data, resulting in a live data that emits the last
+ * value emitted by the original live data (if there were any values emitted) whenever the other live
+ * data emits
  */
 fun <T> LiveData<T>.sampleWith(other: LiveData<*>): LiveData<T> {
     val finalLiveData: MediatorLiveData<T> = MediatorLiveData()
