@@ -10,7 +10,7 @@ Add the dependencies to your project:
 
 ```groovy
 implementation 'com.snakydesign.livedataextensions:lives:1.2.1'
-implementation 'android.arch.lifecycle:extensions:x.x.x' // If you are using the AndoirdX version, that's fine too, as the Jetifier will take care of the conversion.
+implementation 'android.arch.lifecycle:extensions:x.x.x' // If you are using the AndroidX version, that's fine too, as the Jetifier will take care of the conversion.
 ```
 
 If you want to use this library on a Java project, add the following dependency:
