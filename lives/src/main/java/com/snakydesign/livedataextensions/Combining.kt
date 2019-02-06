@@ -243,6 +243,56 @@ fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: L
 }
 
 /**
+ * Combines the latest values from collection of LiveData objects.
+ * First emit is triggered after all of the LiveData objects have emitted a value, and will emit afterwards after any
+ * of them emits a new value.
+ *
+ * The difference between combineLatest and zip is that the zip only emits after all LiveData
+ * objects have a new value, but combineLatest will emit after any of them has a new value.
+ */
+fun <T, Z> combineLatestCompat(vararg sources: LiveData<out T>, combineFunction: (Array<Any?>) -> Z): LiveData<Z> {
+    val finalLiveData: MediatorLiveData<Z> = MediatorLiveData()
+
+    val emitted = Array(sources.size) { false }
+    val values = arrayOfNulls<Any?>(sources.size)
+
+    sources.forEachIndexed { index, source ->
+        finalLiveData.addSource(source) { value ->
+            emitted[index] = true
+            values[index] = value
+
+            synchronized(finalLiveData) {
+                val allEmitted = emitted.count { it } == emitted.size
+
+                if (allEmitted) {
+                    finalLiveData.value = combineFunction(values)
+                }
+            }
+        }
+    }
+
+    return finalLiveData
+}
+
+/**
+ * Combines the latest values from collection of LiveData objects.
+ * First emit is triggered after all of the LiveData objects have emitted a value, and will emit afterwards after any
+ * of them emits a new value.
+ *
+ * The difference between combineLatest and zip is that the zip only emits after all LiveData
+ * objects have a new value, but combineLatest will emit after any of them has a new value.
+ */
+inline fun <reified T, Z> combineLatest(vararg sources: LiveData<out T>, crossinline combineFunction: (Array<T?>) -> Z): LiveData<Z> {
+    return combineLatestCompat(*sources, combineFunction = { latestResult ->
+        val mappedResult = Array(latestResult.size) { index ->
+            latestResult[index] as? T?
+        }
+
+        combineFunction(mappedResult)
+    })
+}
+
+/**
  * Converts the LiveData to `SingleLiveData` and concats it with the `otherLiveData` and emits their
  * values one by one
  */
