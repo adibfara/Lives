@@ -89,7 +89,6 @@ Usage
 - `LiveData.merge(LiveData)` : Merges this LiveData with another one, and emits any item that was emitted by any of them
 - `concat(LiveData...)` : Concats multiple LiveData objects (and converts them to `SingleLiveData` if necessary, and emits their first item in order. (Please check the note below.)
 - `LiveData.then(LiveData)` : Concats the first LiveData with the given one. (Please check the note below.)
-- `LiveData.merge(LiveData)` : Merges this LiveData with another one, and emits any item that was emitted by any of them
 - `startWith(startingValue)`: Emits the `startingValue` before any other value.
 - `zip(firstLiveData, secondLiveData, zipFunction)`: zips both of the LiveDatas using the zipFunction and emits a value after both of them have emitted their values, after that, emits values whenever any of them emits a value.
 - `combineLatest(firstLiveData, secondLiveData, combineFunction)`: combines both of the LiveDatas using the combineFunction and emits a value after any of them have emitted a value.
