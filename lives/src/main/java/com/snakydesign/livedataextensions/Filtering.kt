@@ -7,8 +7,8 @@
 @file:JvmMultifileClass
 package com.snakydesign.livedataextensions
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.snakydesign.livedataextensions.livedata.NonNullLiveData
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 

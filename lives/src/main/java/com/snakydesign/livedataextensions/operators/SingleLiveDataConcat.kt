@@ -1,6 +1,6 @@
 package com.snakydesign.livedataextensions.operators
 
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.MediatorLiveData
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 /**
@@ -31,11 +31,9 @@ class SingleLiveDataConcat<T>(liveDataList:List<SingleLiveData<T>>): MediatorLiv
      * Emits the item that are in the `queue`
      */
     private fun checkEmit(){
-        synchronized(hasEmittedValues){
             while (lastEmittedLiveDataIndex < emittedValues.size-1 && hasEmittedValues[lastEmittedLiveDataIndex+1]){
                 value = emittedValues[lastEmittedLiveDataIndex+1]
                 lastEmittedLiveDataIndex += 1
             }
-        }
     }
 }

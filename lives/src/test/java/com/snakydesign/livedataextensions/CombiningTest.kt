@@ -1,8 +1,8 @@
 package com.snakydesign.livedataextensions
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import org.junit.*
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
