@@ -18,7 +18,7 @@ import com.snakydesign.livedataextensions.livedata.SingleLiveData
  */
 fun <T> LiveData<T>.distinct(): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
-    val dispatchedValues = mutableListOf<T?>()
+    val dispatchedValues = mutableSetOf<T?>()
     mutableLiveData.addSource(this) {
         if(!dispatchedValues.contains(it)) {
             mutableLiveData.value = it
