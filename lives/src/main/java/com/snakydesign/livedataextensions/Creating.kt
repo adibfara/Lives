@@ -6,8 +6,8 @@
 @file:JvmMultifileClass
 package com.snakydesign.livedataextensions
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 /**
  * Creates a LiveData that emits the initialValue immediately.

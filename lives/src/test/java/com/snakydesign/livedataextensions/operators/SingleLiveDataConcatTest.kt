@@ -1,9 +1,9 @@
 package com.snakydesign.livedataextensions.operators
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.snakydesign.livedataextensions.concat
 import org.junit.Assert
 import org.junit.Assert.assertEquals

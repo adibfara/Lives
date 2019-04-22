@@ -7,8 +7,8 @@
 
 package com.snakydesign.livedataextensions
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 import com.snakydesign.livedataextensions.operators.SingleLiveDataConcat
 import java.util.concurrent.atomic.AtomicBoolean
@@ -76,23 +76,19 @@ fun <T, Y, Z> zip(first: LiveData<T>, second: LiveData<Y>, zipFunction: (T, Y) -
     finalLiveData.addSource(first) { value ->
         firstEmitted = true
         firstValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
                 finalLiveData.value = zipFunction(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
             }
-        }
     }
     finalLiveData.addSource(second) { value ->
         secondEmitted = true
         secondValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
                 finalLiveData.value = zipFunction(firstValue!!, secondValue!!)
                 firstEmitted = false
                 secondEmitted = false
-            }
         }
     }
     return finalLiveData
@@ -176,20 +172,16 @@ fun <X, T, Z> combineLatest(first: LiveData<X>, second: LiveData<T>, combineFunc
     finalLiveData.addSource(first) { value ->
         firstEmitted = true
         firstValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
                 finalLiveData.value = combineFunction(firstValue!!, secondValue!!)
             }
-        }
     }
     finalLiveData.addSource(second) { value ->
         secondEmitted = true
         secondValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted) {
                 finalLiveData.value = combineFunction(firstValue!!, secondValue!!)
             }
-        }
     }
     return finalLiveData
 }
@@ -215,29 +207,23 @@ fun <X, Y, T, Z> combineLatest(first: LiveData<X>, second: LiveData<Y>, third: L
     finalLiveData.addSource(first) { value ->
         firstEmitted = true
         firstValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
                 finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
-        }
     }
     finalLiveData.addSource(second) { value ->
         secondEmitted = true
         secondValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
                 finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
-        }
     }
     finalLiveData.addSource(third) { value ->
         thirdEmitted = true
         thirdValue = value
-        synchronized(finalLiveData) {
             if (firstEmitted && secondEmitted && thirdEmitted) {
                 finalLiveData.value = combineFunction(firstValue!!, secondValue!!, thirdValue!!)
             }
-        }
     }
     return finalLiveData
 }

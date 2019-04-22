@@ -1,4 +1,7 @@
-## [1.2.1]
+## [1.3.0]
+### Changed
+- [_BREAKING_] Update the dependencies to AndroidX
+
 ### Changed
 - [_BREAKING_] change the name of `just(value)` to `liveDataOf(value)`, since just was too broad.
 - [_BREAKING_] change the name of `from { }` to `liveDataOf { }`, since just was too broad.

@@ -50,7 +50,7 @@ dependencies {
     implementation libraries.archLifeCycle
     implementation libraries.archLiveData
     testImplementation libraries.mockito
-    testImplementation("android.arch.core:core-testing:${versionNumbers.arch}", {
+    testImplementation('androidx.arch.core:core-testing:2.0.0', {
         exclude group: 'com.android.support', module: 'support-compat'
         exclude group: 'com.android.support', module: 'support-annotations'
         exclude group: 'com.android.support', module: 'support-core-utils'

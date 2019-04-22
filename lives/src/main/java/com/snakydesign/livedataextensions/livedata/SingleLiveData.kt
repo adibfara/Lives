@@ -1,8 +1,8 @@
 package com.snakydesign.livedataextensions.livedata
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Observer
 
 /**
  * Created by Adib Faramarzi
@@ -11,12 +11,10 @@ import android.arch.lifecycle.Observer
 class SingleLiveData<T>(liveData: LiveData<T>) : MediatorLiveData<T>() {
     private var hasSetValue = false
     private val mediatorObserver = Observer<T> {
-        synchronized(hasSetValue){
             if(!hasSetValue){
                 hasSetValue=true
                 this@SingleLiveData.value = it
             }
-        }
     }
     init {
         if(liveData.value!=null){
