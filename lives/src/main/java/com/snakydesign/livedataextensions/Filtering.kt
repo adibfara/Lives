@@ -33,11 +33,11 @@ fun <T> LiveData<T>.distinct(): LiveData<T> {
  */
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
-    var latestValue : T? = null
+    var hasEmitted = false
     mutableLiveData.addSource(this) {
-        if(latestValue!=it) {
+        if (!hasEmitted || it != mutableLiveData.value) {
+            hasEmitted = true
             mutableLiveData.value = it
-            latestValue = it
         }
     }
     return mutableLiveData
