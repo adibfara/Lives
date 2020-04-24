@@ -9,6 +9,7 @@ package com.snakydesign.livedataextensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 import com.snakydesign.livedataextensions.operators.SingleLiveDataConcat
 import java.util.concurrent.atomic.AtomicBoolean
@@ -46,10 +47,19 @@ fun <T> merge(liveDataList: List<LiveData<T>>): LiveData<T> {
  * Emits the `startingValue` before any other value.
  */
 fun <T> LiveData<T>.startWith(startingValue: T?): LiveData<T> {
-    val finalLiveData: MediatorLiveData<T> = MediatorLiveData()
-    finalLiveData.value = startingValue
-    finalLiveData.addSource(this) { source ->
-        finalLiveData.value = source
+    val finalLiveData = MediatorLiveData<T>()
+    var startingData: LiveData<T>? = MutableLiveData(startingValue)
+    finalLiveData.addSource(this) {
+        if (null != startingData) {
+            finalLiveData.removeSource(startingData!!)
+            startingData = null
+        }
+        finalLiveData.value = it
+    }
+    finalLiveData.addSource(startingData!!) {
+        finalLiveData.value = it
+        finalLiveData.removeSource(startingData!!)
+        startingData = null
     }
     return finalLiveData
 }

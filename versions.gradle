@@ -6,7 +6,7 @@ ext.versionNumbers = [
 
         kotlin      : '1.3.20',
         mockito     : '2.21.0',
-        arch        : '2.0.0',
+        arch        : '2.1.0',
         junit       : '4.12',
 
         minSdk      : 16,
