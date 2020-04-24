@@ -4,9 +4,6 @@
 - [_BREAKING_] NonNullLiveData class has been removed. .nonNull() is now returning a regular live data.
 - [_BREAKING_] `zip` and `combineLatest` functions are now nullable.
 
-### Added
-
-
 ## [1.3.0]
 ### Changed
 - [_BREAKING_] Update the dependencies to AndroidX
