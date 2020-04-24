@@ -1,7 +1,8 @@
-## [1.4.0]
+## [2.0.0]
 ### Changed
 - [_BREAKING_] `map` and `switchMap` operators are now using the implementation of [Android LiveData KTX](https://developer.android.com/kotlin/ktx#livedata) .
 - [_BREAKING_] NonNullLiveData class has been removed. .nonNull() is now returning a regular live data.
+- [_BREAKING_] `zip` and `combineLatest` functions are now nullable.
 
 ### Added
 
