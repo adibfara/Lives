@@ -1,8 +1,15 @@
+## [1.4.0]
+### Changed
+- [_BREAKING_] `map` and `switchMap` operators are now using the implementation of [Android LiveData KTX](https://developer.android.com/kotlin/ktx#livedata) .
+- [_BREAKING_] NonNullLiveData class has been removed. .nonNull() is now returning a regular live data.
+
+### Added
+
+
 ## [1.3.0]
 ### Changed
 - [_BREAKING_] Update the dependencies to AndroidX
-
-### Changed
+- Removed synchronized blocks, since all LiveData operation is already handled on the main thread
 - [_BREAKING_] change the name of `just(value)` to `liveDataOf(value)`, since just was too broad.
 - [_BREAKING_] change the name of `from { }` to `liveDataOf { }`, since just was too broad.
 - [_BREAKING_] change the name of `empty()` to `emptyLiveData()`, since empty was too broad.

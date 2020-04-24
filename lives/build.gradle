@@ -49,6 +49,7 @@ dependencies {
     testImplementation libraries.kotlinTestJunit
     implementation libraries.archLifeCycle
     implementation libraries.archLiveData
+    implementation libraries.liveDataKtx
     testImplementation libraries.mockito
     testImplementation('androidx.arch.core:core-testing:2.0.0', {
         exclude group: 'com.android.support', module: 'support-compat'

@@ -64,28 +64,6 @@ class TransformingTest {
     }
 
     @Test
-    fun `test LiveData map`(){
-        val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = liveDataOf(2).map { 3 }
-        testingLiveData.observeForever(observer)
-
-        assertEquals(3,testingLiveData.value)
-        Mockito.verify(observer).onChanged(3)
-        Mockito.verifyNoMoreInteractions(observer)
-    }
-
-    @Test
-    fun `test LiveData switchMap`(){
-        val observer= Mockito.mock(Observer::class.java) as Observer<Int>
-        val testingLiveData = liveDataOf(2).switchMap { liveDataOf(4) }
-        testingLiveData.observeForever(observer)
-
-        assertEquals(4,testingLiveData.value)
-        Mockito.verify(observer).onChanged(4)
-        Mockito.verifyNoMoreInteractions(observer)
-    }
-
-    @Test
     fun `test LiveData doBeforeNext`(){
         val observer= Mockito.mock(Observer::class.java) as Observer<Int>
         val mockedBeforeNext = mock(TestOnNextAction::class.java) as OnNextAction<Int>

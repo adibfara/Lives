@@ -90,7 +90,7 @@ Usage
 - `skip(n)` : Skips the first n values.
 - `skipUntil(predicate)` : Skips all values until a certain predicate is met (the item that actives the predicate is also emitted).
 - `elementAt(index)` : emits the item that was emitted at `index` position
-- `nonNull()` : Will never emit the nulls to the observers (outputs a `NonNullLiveData`).
+- `nonNull()` : Will never emit the nulls to the observers.
 - `defaultIfNull(value)`: Will produce the `value` when `null` is recieved.
 
 **Combining**

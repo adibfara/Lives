@@ -9,7 +9,7 @@ package com.snakydesign.livedataextensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.snakydesign.livedataextensions.livedata.NonNullLiveData
+import androidx.lifecycle.Transformations
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
 
@@ -32,15 +32,7 @@ fun <T> LiveData<T>.distinct(): LiveData<T> {
  * Emits the items that are different from the last item
  */
 fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
-    val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
-    var latestValue : T? = null
-    mutableLiveData.addSource(this) {
-        if(latestValue!=it) {
-            mutableLiveData.value = it
-            latestValue = it
-        }
-    }
-    return mutableLiveData
+    return Transformations.distinctUntilChanged(this)
 }
 
 /**
@@ -148,8 +140,18 @@ fun <T> LiveData<T>.elementAt(index:Int): SingleLiveData<T> {
 /**
  * Emits only the values that are not null
  */
-fun <T> LiveData<T>.nonNull(): NonNullLiveData<T> {
-    return NonNullLiveData(this)
+fun <T> LiveData<T>.nonNull(): MediatorLiveData<T> {
+    return MediatorLiveData<T>().also { mediatorLiveData ->
+        this.value?.let {
+            mediatorLiveData.value = it
+        }
+        mediatorLiveData.addSource(this@nonNull) {
+            if (it != null) {
+                mediatorLiveData.value = it
+            }
+        }
+
+    }
 }
 
 /**

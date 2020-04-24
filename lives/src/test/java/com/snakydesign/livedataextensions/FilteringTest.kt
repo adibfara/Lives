@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import org.junit.*
 import org.mockito.Mockito
 import org.mockito.Mockito.times
-import java.lang.IllegalStateException
 import kotlin.test.assertEquals
 
 /**
@@ -90,13 +89,25 @@ class FilteringTest {
         testingLiveData.observeForever(observer)
 
         sourceLiveData.value = 2
-        assertEquals(2,testingLiveData.value)
+        assertEquals(2, testingLiveData.value)
         Mockito.verify(observer).onChanged(2)
 
         sourceLiveData.value = 2
-        assertEquals(2,testingLiveData.value)
+        assertEquals(2, testingLiveData.value)
 
         Mockito.verifyNoMoreInteractions(observer)
+    }
+
+    @Test
+    fun `test LiveData distinctUntilChanged initial null value`() {
+        val observer = Mockito.mock(Observer::class.java) as Observer<Int?>
+        val sourceLiveData = MutableLiveData<Int?>()
+        val testingLiveData = sourceLiveData.distinctUntilChanged()
+        testingLiveData.observeForever(observer)
+
+        sourceLiveData.value = null
+        assertEquals(null, testingLiveData.value)
+
     }
 
     @Test
