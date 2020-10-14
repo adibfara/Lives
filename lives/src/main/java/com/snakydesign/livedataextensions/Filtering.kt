@@ -9,6 +9,7 @@ package com.snakydesign.livedataextensions
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.snakydesign.livedataextensions.livedata.SingleLiveData
 
@@ -38,7 +39,7 @@ fun <T> LiveData<T>.distinctUntilChanged(): LiveData<T> {
 /**
  * Emits the items that pass through the predicate
  */
-inline fun <T> LiveData<T>.filter(crossinline predicate : (T?)->Boolean): LiveData<T> {
+inline fun <T> LiveData<T>.filter(crossinline predicate : (T)->Boolean): LiveData<T> {
     val mutableLiveData: MediatorLiveData<T> = MediatorLiveData()
     mutableLiveData.addSource(this) {
         if(predicate(it))
