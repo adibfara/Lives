@@ -1,4 +1,4 @@
-Lives - Android LiveData Extensions for Kotlin and Java
+Lives - Reactive LiveData Extensions for Kotlin and Java
 -------------------------------------------------------
 [![Build Status](https://travis-ci.org/adibfara/Lives.svg?branch=master)](https://travis-ci.org/adibfara/Lives) [![Latest Version](https://img.shields.io/bintray/v/adibfara/lives/lives.svg?label=version)](https://github.com/adibfara/Lives)
 
